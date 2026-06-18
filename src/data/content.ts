@@ -49,28 +49,28 @@ const finished: ProjectEntry[] = [
     title:
       'Neuroanatomical Correlates of Stroke-Related Dizziness and Vertigo: Secondary Analysis from the INSPiRE-TMS Trial',
     body: '',
-    note: 'published',
+    note: '',
   },
   {
     id: 'neonatal-white-matter',
     title:
       'Sex Differences in Neonatal White Matter Microstructure and Interhemispheric Lateralization: A Diffusion Tensor Imaging Study',
     body: '',
-    note: 'published',
+    note: '',
   },
   {
     id: 'qc-pipelines-dwi',
     title:
       'Comparative Analysis of Quality Control Pipelines for Diffusion Weighted Imaging Data in a Pediatric Population: A Study of QSIPrep and dMRIPrep Pipelines',
     body: '',
-    note: 'published',
+    note: '',
   },
   {
     id: 'anxiety-transgender-youth',
     title:
       'Anxiety levels and structural brain connectivity in early pubertal transgender and cisgender youth',
     body: '',
-    note: 'published',
+    note: '',
   },
 ]
 
