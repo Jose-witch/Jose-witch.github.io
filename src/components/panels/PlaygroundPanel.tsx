@@ -5,6 +5,8 @@ import { ImageSlot } from '../ImageSlot'
 import { PanelHeader } from '../PanelHeader'
 import { PostDetail } from './PostDetail'
 
+const BLOG_PREVIEW_CHARS = 150
+
 /** "2025-02-11" → "FEB 11, 2025" (mono, uppercased). */
 export function fmtDate(iso: string): string {
   const d = new Date(iso + 'T00:00:00')
@@ -22,7 +24,7 @@ export function PlaygroundPanel() {
 
   return (
     <div>
-      <PanelHeader kicker={playground.kicker} title={playground.title} />
+      <PanelHeader title={playground.title} />
 
       {/* A refined masonry: heights vary, but every card is on the grid at 0°.
           Image posts get a cover; text posts become a quiet text card. */}
@@ -53,7 +55,7 @@ function PostCard({ post, index, onOpen }: CardProps) {
       onClick={onOpen}
       className={`post-card reveal ${hasCover ? 'post-card--image' : 'post-card--text'}`}
       aria-label={`Open post: ${post.title}`}
-      style={{ ['--i' as string]: index + 3 }}
+      style={{ ['--i' as string]: index + 1 }}
     >
       {hasCover ? (
         <>
@@ -62,8 +64,8 @@ function PostCard({ post, index, onOpen }: CardProps) {
             style={{
               position: 'relative',
               aspectRatio: post.size === 'large' ? '4 / 5' : '1 / 1',
-              background: color.bgRaised,
-              border: `0.5px solid ${color.line}`,
+              background: 'rgba(232,226,212,.035)',
+              border: `0.5px solid ${color.lineSoft}`,
             }}
           >
             <ImageSlot src={post.cover!.src} placeholder="drop image" alt={post.cover!.alt} />
@@ -83,15 +85,23 @@ function PostCard({ post, index, onOpen }: CardProps) {
         <div className="post-card-text-body">
           <span className="post-card-date post-card-date--top">{fmtDate(post.date)}</span>
           <span className="post-card-title post-card-title--text">{post.title}</span>
-          <p className="post-card-excerpt">{firstLines(post.body)}</p>
+          <p className="post-card-excerpt">{blogPreview(post.body)}</p>
         </div>
       )}
     </button>
   )
 }
 
-/** A short serif excerpt for text cards — the first paragraph, trimmed. */
-function firstLines(body: string): string {
-  const first = body.split(/\n\s*\n/)[0].replace(/!\[.*?\]\(.*?\)/g, '').trim()
-  return first.length > 140 ? first.slice(0, 140).trimEnd() + '…' : first
+/** A short serif excerpt for text cards; full text stays inside PostDetail. */
+function blogPreview(body: string): string {
+  const text = body
+    .split(/\n\s*\n/)
+    .filter((block) => !/^!\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)$/.test(block.trim()))
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  return text.length > BLOG_PREVIEW_CHARS
+    ? text.slice(0, BLOG_PREVIEW_CHARS).trimEnd() + '…'
+    : text
 }

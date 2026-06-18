@@ -3,12 +3,12 @@ import { brain } from '../../data/content'
 import { PanelHeader } from '../PanelHeader'
 
 export function BrainPanel() {
-  // Reveal order: header occupies --i 0..2, the index picks up from there.
-  let order = 3
+  // Reveal order: header occupies --i 0, the index picks up from there.
+  let order = 1
 
   return (
     <div>
-      <PanelHeader kicker={brain.kicker} title={brain.title} />
+      <PanelHeader title={brain.title} />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px,5vw,72px)' }}>
         {brain.groups.map((group) => (
@@ -20,7 +20,7 @@ export function BrainPanel() {
               gridTemplateColumns: '88px minmax(0, 1fr)',
               gap: 'clamp(20px,3vw,48px)',
               alignItems: 'start',
-              borderTop: `0.5px solid ${color.line}`,
+              borderTop: `0.5px solid ${color.lineSoft}`,
               paddingTop: 24,
             }}
           >
@@ -31,9 +31,9 @@ export function BrainPanel() {
                   fontFamily: font.mono,
                   fontWeight: 400,
                   fontSize: type.mono,
-                  letterSpacing: '.05em',
-                  textTransform: 'uppercase',
-                  color: color.accent,
+                  letterSpacing: '.08em',
+                  textTransform: 'none',
+                  color: color.inkFaint,
                   position: 'sticky',
                   top: 24,
                 }}
@@ -53,7 +53,7 @@ export function BrainPanel() {
                     gridTemplateColumns: '1fr auto',
                     gap: '6px 24px',
                     padding: 'clamp(18px,2.2vw,28px) 0',
-                    borderBottom: `0.5px solid ${color.line}`,
+                    borderBottom: `0.5px solid ${color.lineSoft}`,
                     transition: `background ${dur.fast} ${ease.soft}`,
                   }}
                 >
@@ -62,7 +62,7 @@ export function BrainPanel() {
                       fontFamily: font.mono,
                       fontSize: type.mono,
                       letterSpacing: '.04em',
-                      color: color.accent,
+                      color: color.inkFaint,
                       gridColumn: '1 / 2',
                     }}
                   >
@@ -75,7 +75,7 @@ export function BrainPanel() {
                       fontFamily: font.mono,
                       fontSize: type.mono,
                       letterSpacing: '.04em',
-                      textTransform: 'uppercase',
+                      textTransform: 'none',
                       color: color.inkFaint,
                       textAlign: 'right',
                       whiteSpace: 'nowrap',
@@ -91,10 +91,10 @@ export function BrainPanel() {
                       margin: '6px 0 0',
                       gridColumn: '1 / -1',
                       fontFamily: font.display,
-                      fontWeight: 600,
+                      fontWeight: 500,
                       fontSize: 'clamp(22px,3vw,36px)',
                       lineHeight: 1.05,
-                      letterSpacing: '-.02em',
+                      letterSpacing: '-.015em',
                       color: color.ink,
                     }}
                   >
@@ -108,7 +108,7 @@ export function BrainPanel() {
                       maxWidth: 560,
                       fontFamily: font.serif,
                       fontSize: type.body,
-                      lineHeight: 1.55,
+                      lineHeight: 1.62,
                       color: color.inkMuted,
                     }}
                   >

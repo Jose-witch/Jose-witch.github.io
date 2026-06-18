@@ -101,7 +101,7 @@ export function PostDetail({ post, onClose }: Props) {
     </h2>
   )
 
-  const body = <PostBody body={post.body} />
+  const body = <PostBody body={post.body} renderImages={!hasImages} />
 
   return createPortal(
     <div
@@ -117,10 +117,14 @@ export function PostDetail({ post, onClose }: Props) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background:
-          'linear-gradient(180deg, rgba(10,10,10,.62) 0%, rgba(10,10,10,.82) 100%)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        backgroundColor: '#070706',
+        backgroundImage:
+          'linear-gradient(180deg, rgba(5,5,5,.78) 0%, rgba(7,7,6,.92) 100%), radial-gradient(76% 84% at 50% 42%, rgba(232,226,212,.04) 0%, transparent 58%), url("/intro.jpeg")',
+        backgroundSize: '100% 100%, 100% 100%, cover',
+        backgroundPosition: 'center, center, center bottom',
+        backgroundRepeat: 'no-repeat',
+        backdropFilter: 'blur(3px)',
+        WebkitBackdropFilter: 'blur(3px)',
         animation: `postIn .5s ${ease.spring} both`,
       }}
     >
@@ -153,8 +157,8 @@ export function PostDetail({ post, onClose }: Props) {
               style={{
                 position: 'relative',
                 aspectRatio: '4 / 3',
-                background: color.bgRaised,
-                border: `0.5px solid ${color.line}`,
+                background: 'rgba(232,226,212,.035)',
+                border: `0.5px solid ${color.lineSoft}`,
               }}
             >
               <ImageSlot src={cur.src} placeholder="drop image" alt={cur.alt} />
@@ -205,12 +209,12 @@ export function PostDetail({ post, onClose }: Props) {
                       onClick={() => setFrame(i)}
                       style={{
                         width: i === frame ? 22 : 7,
-                        height: 7,
+                        height: 1,
                         padding: 0,
                         border: 'none',
-                        borderRadius: 999,
+                        borderRadius: 0,
                         cursor: 'pointer',
-                        background: i === frame ? color.accent : color.inkGhost,
+                        background: i === frame ? color.inkMuted : color.inkGhost,
                         transition: `width .4s ${ease.spring}, background .3s ease`,
                       }}
                     />
@@ -258,7 +262,7 @@ export function PostDetail({ post, onClose }: Props) {
  * `![alt](src "caption")` images rendered full-width with an optional mono
  * caption (§5.4). Kept deliberately small — no full markdown engine needed.
  */
-function PostBody({ body }: { body: string }) {
+function PostBody({ body, renderImages = true }: { body: string; renderImages?: boolean }) {
   const blocks = body.split(/\n\s*\n/)
   const imgRe = /^!\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)$/
 
@@ -266,8 +270,10 @@ function PostBody({ body }: { body: string }) {
     <div className="post-body" style={{ margin: '20px 0 0' }}>
       {blocks.map((raw, i) => {
         const block = raw.trim()
+        if (!block) return null
         const m = block.match(imgRe)
         if (m) {
+          if (!renderImages) return null
           const [, alt, src, caption] = m
           return (
             <figure key={i} style={{ margin: '24px 0' }}>
@@ -276,8 +282,8 @@ function PostBody({ body }: { body: string }) {
                 style={{
                   position: 'relative',
                   aspectRatio: '4 / 3',
-                  background: color.bgRaised,
-                  border: `0.5px solid ${color.line}`,
+                  background: 'rgba(232,226,212,.035)',
+                  border: `0.5px solid ${color.lineSoft}`,
                 }}
               >
                 <ImageSlot src={src} placeholder="drop image" alt={alt} />

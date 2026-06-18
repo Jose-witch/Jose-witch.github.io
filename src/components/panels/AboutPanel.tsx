@@ -10,11 +10,11 @@ import { PanelHeader } from '../PanelHeader'
  * the right — exactly like Brain's ongoing/finished archive.
  */
 export function AboutPanel() {
-  let order = 3
+  let order = 1
 
   return (
     <div>
-      <PanelHeader kicker={about.kicker} title={about.title} />
+      <PanelHeader title={about.title} />
 
       {/* bio + portrait — the opening row of the body, on the same grid */}
       <div
@@ -24,7 +24,7 @@ export function AboutPanel() {
           gridTemplateColumns: '88px minmax(0, 1fr)',
           gap: 'clamp(20px,3vw,48px)',
           alignItems: 'start',
-          borderTop: `0.5px solid ${color.line}`,
+          borderTop: `0.5px solid ${color.lineSoft}`,
           paddingTop: 24,
           ['--i' as string]: order++,
         }}
@@ -34,9 +34,9 @@ export function AboutPanel() {
           style={{
             fontFamily: font.mono,
             fontSize: type.mono,
-            letterSpacing: '.05em',
-            textTransform: 'uppercase',
-            color: color.accent,
+            letterSpacing: '.08em',
+            textTransform: 'none',
+            color: color.inkFaint,
           }}
         >
           who
@@ -48,8 +48,8 @@ export function AboutPanel() {
             style={{
               position: 'relative',
               aspectRatio: '3 / 4',
-              background: color.bgRaised,
-              border: `0.5px solid ${color.line}`,
+              background: 'rgba(232,226,212,.035)',
+              border: `0.5px solid ${color.lineSoft}`,
             }}
           >
             <ImageSlot src={about.portrait.src} placeholder="drop image" alt={about.portrait.alt} />
@@ -75,7 +75,7 @@ export function AboutPanel() {
               fontWeight: 400,
               fontSize: type.bodyLg,
               lineHeight: 1.62,
-              color: color.ink,
+              color: color.inkMuted,
             }}
           >
             {about.bio}
@@ -94,7 +94,7 @@ export function AboutPanel() {
               gridTemplateColumns: '88px minmax(0, 1fr)',
               gap: 'clamp(20px,3vw,48px)',
               alignItems: 'baseline',
-              borderTop: `0.5px solid ${color.line}`,
+              borderTop: `0.5px solid ${color.lineSoft}`,
               padding: 'clamp(18px,2.2vw,26px) 0',
               ['--i' as string]: order++,
             }}
@@ -104,9 +104,9 @@ export function AboutPanel() {
               style={{
                 fontFamily: font.mono,
                 fontSize: type.mono,
-                letterSpacing: '.05em',
-                textTransform: 'uppercase',
-                color: color.accent,
+                letterSpacing: '.08em',
+                textTransform: 'none',
+                color: color.inkFaint,
               }}
             >
               {s.label}
@@ -120,7 +120,7 @@ export function AboutPanel() {
                     fontFamily: font.serif,
                     fontSize: type.body,
                     lineHeight: 1.4,
-                    color: color.ink,
+                    color: color.inkMuted,
                   }}
                 >
                   {line}
@@ -135,7 +135,7 @@ export function AboutPanel() {
                     fontFamily: font.serif,
                     fontSize: type.body,
                     lineHeight: 1.4,
-                    color: color.ink,
+                    color: color.inkMuted,
                     textDecoration: 'none',
                     alignSelf: 'flex-start',
                   }}

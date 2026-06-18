@@ -43,7 +43,6 @@ const finished: ProjectEntry[] = [
 ]
 
 export const brain = {
-  kicker: 'the skull → what the mind makes',
   title: 'Brain project',
   groups: [
     { id: 'ongoing', label: 'ongoing', entries: ongoing },
@@ -71,9 +70,6 @@ export type PlayPost = {
   title: string
   /** ISO-ish date string used for display + sort. */
   date: string
-  /** Breadcrumb halves shown in the post header. */
-  section: string
-  kicker: string
   /** Short line shown on the masonry card under the title. */
   excerpt: string
   /** Long-form markdown-ish body (plain paragraphs, split on blank lines). */
@@ -93,8 +89,6 @@ const playPosts: PlayPost[] = [
     id: 'play-1',
     title: 'U-Bahn ghosts',
     date: '2025-02-11',
-    section: 'the heart',
-    kicker: 'what it keeps',
     excerpt: 'Long exposures on the last trains out of Alexanderplatz.',
     body: `Shot on the last trains out of Alexanderplatz — bodies smear into light and the carriage keeps its own time.
 
@@ -116,8 +110,6 @@ Three frames from one cold platform, hand-held, shutter dragged until the people
     id: 'play-2',
     title: 'On working the night',
     date: '2025-03-03',
-    section: 'the heart',
-    kicker: 'what it keeps',
     excerpt: 'A short note on the hours nobody photographs.',
     body: `The night shift has a texture you can't explain to anyone who keeps daylight hours. Time goes soft. The ward breathes slower. You become very good at reading a face in the dark.
 
@@ -133,8 +125,6 @@ No photograph for this one. Some hours refuse to be kept that way.`,
     id: 'play-3',
     title: 'The cat that visits',
     date: '2025-04-09',
-    section: 'the heart',
-    kicker: 'what it keeps',
     excerpt: 'No name, no collar, all opinions.',
     body: `Comes to the fire escape around dawn, leaves before I can decide if it's mine. A small recurring miracle with strong opinions about the windowsill.`,
     cover: { src: '/bird.jpg', alt: 'A visiting cat at dawn' },
@@ -148,8 +138,6 @@ No photograph for this one. Some hours refuse to be kept that way.`,
     id: 'play-4',
     title: 'First light through an old lens',
     date: '2025-04-22',
-    section: 'the heart',
-    kicker: 'what it keeps',
     excerpt: 'A roll shot just to learn the camera’s breathing.',
     body: `A roll I shot only to learn the camera's breathing — light leaks and all. Mistakes worth keeping.
 
@@ -170,8 +158,6 @@ The lens is older than I am and slightly drunk about focus. But there's a softne
     id: 'play-5',
     title: 'Spree, 6am',
     date: '2025-05-18',
-    section: 'the heart',
-    kicker: 'what it keeps',
     excerpt: 'The river before the city wakes.',
     body: `Fog on the water, one rower, the bridges still asleep. The only hour Berlin holds still long enough for a photograph.`,
     cover: { src: '/gourmet.jpg', alt: 'Spree at dawn' },
@@ -188,8 +174,6 @@ The lens is older than I am and slightly drunk about focus. But there's a softne
     id: 'play-6',
     title: 'Pressed, between pages',
     date: '2025-06-07',
-    section: 'the heart',
-    kicker: 'what it keeps',
     excerpt: 'An accidental herbarium of every walk home.',
     body: `Leaves and petals flattened into the back of a notebook — an accidental herbarium of every walk home. One day I'll know all their names.`,
     size: 'small',
@@ -198,7 +182,6 @@ The lens is older than I am and slightly drunk about focus. But there's a softne
 ]
 
 export const playground = {
-  kicker: 'the heart → what it keeps',
   title: 'Playground',
   posts: playPosts,
 }
@@ -214,7 +197,6 @@ export type AboutSection = {
 }
 
 export const about = {
-  kicker: 'the feet → where they stand',
   title: 'About',
   /** A real, on-brand image (replaces the removed meme). City-at-odd-hours. */
   portrait: { src: '/nightlife.jpg', alt: 'Berlin, photographed at an odd hour' },

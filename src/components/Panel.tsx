@@ -8,9 +8,9 @@ type Props = {
 }
 
 /**
- * A full-screen, semi-transparent glass takeover (not a small modal). When a
- * section is opened, the home page fades out and this layer lifts into place.
- * Backdrop click / ✕ / Escape all close it.
+ * A full-screen darkroom takeover (not a small modal). When a section is
+ * opened, the home page fades out and this layer lifts into place. Backdrop
+ * click / ✕ / Escape all close it.
  */
 export function Panel({ open, onClose, children }: Props) {
   return (
@@ -24,15 +24,19 @@ export function Panel({ open, onClose, children }: Props) {
         // viewport's right edge instead of the centered content's edge.
         overflowY: 'auto',
         overflowX: 'hidden',
-        background: open
-          ? 'linear-gradient(180deg, rgba(17,17,16,.74) 0%, rgba(17,17,16,.86) 100%)'
-          : 'rgba(17,17,16,0)',
-        backdropFilter: open ? 'blur(16px)' : 'blur(0)',
-        WebkitBackdropFilter: open ? 'blur(16px)' : 'blur(0)',
+        backgroundColor: open ? '#070706' : 'rgba(17,17,16,0)',
+        backgroundImage: open
+          ? 'linear-gradient(180deg, rgba(5,5,5,.78) 0%, rgba(7,7,6,.9) 100%), radial-gradient(85% 92% at 52% 40%, rgba(232,226,212,.045) 0%, transparent 58%), url("/intro.jpeg")'
+          : 'none',
+        backgroundSize: '100% 100%, 100% 100%, cover',
+        backgroundPosition: 'center, center, center bottom',
+        backgroundRepeat: 'no-repeat',
+        backdropFilter: open ? 'blur(3px)' : 'blur(0)',
+        WebkitBackdropFilter: open ? 'blur(3px)' : 'blur(0)',
         opacity: open ? 1 : 0,
         pointerEvents: open ? 'auto' : 'none',
         transition:
-          'opacity .55s ease, background .55s ease, backdrop-filter .55s ease',
+          'opacity .55s ease, background-color .55s ease, backdrop-filter .55s ease',
       }}
     >
       {/* a single inked print-rule across the top — fades in like a pressed
@@ -45,10 +49,10 @@ export function Panel({ open, onClose, children }: Props) {
           left: 0,
           height: 1,
           width: '100%',
-          // soft riso-red, denser in the middle and feathering to nothing at the
-          // edges so it reads as hand-pressed ink, not a UI chrome bar
-          background: `linear-gradient(90deg, transparent 0%, ${color.red} 22%, ${color.red} 78%, transparent 100%)`,
-          opacity: open ? 0.5 : 0,
+          // a soft ink rule, denser in the middle and feathering to nothing at
+          // the edges so it reads as hand-pressed, not UI chrome
+          background: `linear-gradient(90deg, transparent 0%, ${color.inkMuted} 22%, ${color.inkMuted} 78%, transparent 100%)`,
+          opacity: open ? 0.18 : 0,
           transition: 'opacity .7s ease .1s',
           zIndex: 42,
         }}
@@ -71,10 +75,10 @@ export function Panel({ open, onClose, children }: Props) {
           justifyContent: 'center',
           cursor: 'pointer',
           fontFamily: font.mono,
-          fontSize: 'clamp(34px,3.4vw,44px)',
+          fontSize: 'clamp(28px,2.8vw,38px)',
           lineHeight: 1,
           // bare glyph — no disc, no border
-          color: 'rgba(241,233,216,.62)',
+          color: color.inkFaint,
           background: 'transparent',
           border: 'none',
           padding: 0,
