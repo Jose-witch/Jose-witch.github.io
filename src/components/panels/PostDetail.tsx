@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { color, font, type, ease } from '../../styles/theme'
 import { ImageSlot } from '../ImageSlot'
 import type { PlayPost } from '../../data/content'
+import { fmtDate } from './PlaygroundPanel'
 
 type Props = {
   post: PlayPost
@@ -10,29 +11,25 @@ type Props = {
 }
 
 /**
- * The opened "post" — an Instagram-style takeover that slides over the photo
- * wall. A frame-by-frame carousel on the left (paged with the dots / arrows),
- * the title, date and body alongside. Click the backdrop, the back arrow, or
- * press Escape to return to the wall.
+ * The opened post — a takeover over the masonry. Three modes:
+ *   - multi-image  → carousel (arrows + dots) on the left, meta/text on right
+ *   - single image → the image fixed (no carousel chrome)
+ *   - pure text    → a centred, narrow reading column (blog mode)
+ * Backdrop click / ✕ / Escape returns to the wall.
  */
 export function PostDetail({ post, onClose }: Props) {
+  const frames = post.images ?? []
   const [frame, setFrame] = useState(0)
-  const frames = post.frames
   const many = frames.length > 1
+  const hasImages = frames.length > 0
 
-  // Reset to the first frame whenever a different post is opened.
   useEffect(() => setFrame(0), [post.id])
 
-  // While a post is open, flag the body so the underlying section panel hides
-  // its own ✕ (which would return all the way home). Our ✕ replaces it and
-  // steps back only to the wall — see .post-open .panel-close in global.css.
   useEffect(() => {
     document.body.classList.add('post-open')
     return () => document.body.classList.remove('post-open')
   }, [])
 
-  // Escape closes the post (not the whole panel — App's Escape would jump all
-  // the way home, so we stop it here while a post is open).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -49,6 +46,62 @@ export function PostDetail({ post, onClose }: Props) {
   }, [many, frames.length, onClose])
 
   const cur = frames[frame]
+  const minRead = Math.max(1, Math.round(post.body.split(/\s+/).length / 200))
+
+  const closeBtn = (
+    <button
+      type="button"
+      onClick={onClose}
+      className="post-close"
+      aria-label="Back to wall"
+      style={{
+        position: 'fixed',
+        top: 'clamp(20px,3vw,32px)',
+        right: 'clamp(22px,3vw,40px)',
+        zIndex: 60,
+        width: 'clamp(40px,4vw,52px)',
+        height: 'clamp(40px,4vw,52px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: font.mono,
+        fontSize: 'clamp(30px,3vw,40px)',
+        lineHeight: 1,
+        color: color.inkMuted,
+        cursor: 'pointer',
+      }}
+    >
+      <span className="x-glyph">✕</span>
+    </button>
+  )
+
+  // ── meta + title + body, shared by all modes ───────────────────────────────
+  const meta = (
+    <div className="post-meta-line">
+      {fmtDate(post.date)}
+      {hasImages
+        ? ` · ${frames.length} ${frames.length === 1 ? 'frame' : 'frames'}`
+        : ` · ${minRead} min read`}
+    </div>
+  )
+
+  const title = (
+    <h2
+      style={{
+        fontFamily: font.display,
+        fontWeight: 600,
+        fontSize: type.displaySm,
+        lineHeight: 1.02,
+        letterSpacing: '-.02em',
+        color: color.ink,
+        margin: 0,
+      }}
+    >
+      {post.title}
+    </h2>
+  )
+
+  const body = <PostBody body={post.body} />
 
   return createPortal(
     <div
@@ -61,194 +114,204 @@ export function PostDetail({ post, onClose }: Props) {
         overflowY: 'auto',
         overflowX: 'hidden',
         overscrollBehavior: 'contain',
-        scrollSnapType: 'y proximity',
-        scrollBehavior: 'smooth',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         background:
-          'linear-gradient(180deg, rgba(7,5,3,.55) 0%, rgba(7,5,3,.74) 100%)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+          'linear-gradient(180deg, rgba(10,10,10,.62) 0%, rgba(10,10,10,.82) 100%)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         animation: `postIn .5s ${ease.spring} both`,
       }}
     >
-      {/* The post sits ON TOP of the section panel, whose own ✕ (z-43, returns
-          all the way home) is directly below this one. We render our own ✕ at a
-          higher z so a habitual "close" click lands here and steps back just one
-          level — to the wall — instead of punching through to home. */}
-      <button
-        type="button"
-        onClick={onClose}
-        className="post-close"
-        aria-label="Back to wall"
-        style={{
-          position: 'fixed',
-          top: 'clamp(20px,3vw,32px)',
-          right: 'clamp(22px,3vw,40px)',
-          zIndex: 60,
-          width: 'clamp(40px,4vw,52px)',
-          height: 'clamp(40px,4vw,52px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: font.mono,
-          fontSize: 'clamp(34px,3.4vw,44px)',
-          lineHeight: 1,
-          color: 'rgba(241,233,216,.72)',
-          cursor: 'pointer',
-        }}
-      >
-        <span className="x-glyph">✕</span>
-      </button>
+      {closeBtn}
 
-      <div
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label={post.title}
-        className="post-grid"
-        style={{
-          position: 'relative',
-          scrollSnapAlign: 'center',
-          flexShrink: 0,
-          width: '100%',
-          maxWidth: 1100,
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, .85fr)',
-          alignItems: 'center',
-          gap: 'clamp(26px,4vw,64px)',
-          padding:
-            'clamp(50px,6vh,80px) clamp(26px,7vw,90px)',
-        }}
-      >
-        {/* ===== carousel ===== */}
-        <div style={{ position: 'relative' }}>
-          <div
-            className="img-slot"
-            style={{
-              position: 'relative',
-              aspectRatio: cur.aspect,
-              background: cur.image ? color.bgSlot : 'rgba(236,228,206,.06)',
-              border: cur.image
-                ? `1px solid rgba(236,228,206,.26)`
-                : `1px dashed rgba(236,228,206,.28)`,
-            }}
-          >
-            <ImageSlot src={cur.image} placeholder={cur.placeholder} alt={post.title} />
-          </div>
-
-          {cur.note && (
+      {hasImages ? (
+        // ── image / mixed post: image column + text column ──────────────────
+        <div
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-label={post.title}
+          className="post-grid"
+          style={{
+            position: 'relative',
+            flexShrink: 0,
+            width: '100%',
+            maxWidth: 1080,
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, .9fr)',
+            alignItems: 'center',
+            gap: 'clamp(26px,4vw,64px)',
+            padding: 'clamp(50px,6vh,80px) clamp(26px,7vw,90px)',
+          }}
+        >
+          <div style={{ position: 'relative' }}>
             <div
+              className="img-slot"
               style={{
-                fontFamily: font.serif,
-                fontStyle: 'italic',
-                fontSize: type.caption,
-                color: color.inkFaint,
-                marginTop: 9,
+                position: 'relative',
+                aspectRatio: '4 / 3',
+                background: color.bgRaised,
+                border: `0.5px solid ${color.line}`,
               }}
             >
-              {cur.note}
+              <ImageSlot src={cur.src} placeholder="drop image" alt={cur.alt} />
             </div>
-          )}
 
-          {many && (
-            <>
-              <button
-                type="button"
-                className="post-arrow"
-                aria-label="Previous"
-                disabled={frame === 0}
-                onClick={() => setFrame((f) => Math.max(f - 1, 0))}
-                style={{ left: 10 }}
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className="post-arrow"
-                aria-label="Next"
-                disabled={frame === frames.length - 1}
-                onClick={() => setFrame((f) => Math.min(f + 1, frames.length - 1))}
-                style={{ right: 10 }}
-              >
-                ›
-              </button>
-
-              {/* frame dots */}
+            {cur.caption && (
               <div
                 style={{
-                  display: 'flex',
-                  gap: 7,
-                  justifyContent: 'center',
-                  marginTop: 16,
+                  fontFamily: font.mono,
+                  fontSize: type.mono,
+                  color: color.inkFaint,
+                  marginTop: 9,
                 }}
               >
-                {frames.map((f, i) => (
-                  <button
-                    key={f.id}
-                    type="button"
-                    aria-label={`Frame ${i + 1}`}
-                    onClick={() => setFrame(i)}
-                    style={{
-                      width: i === frame ? 22 : 7,
-                      height: 7,
-                      padding: 0,
-                      border: 'none',
-                      borderRadius: 999,
-                      cursor: 'pointer',
-                      background: i === frame ? color.redBright : color.inkGhost,
-                      transition: `width .4s ${ease.spring}, background .3s ease`,
-                    }}
-                  />
-                ))}
+                {cur.caption}
               </div>
-            </>
-          )}
-        </div>
+            )}
 
-        {/* ===== post text ===== */}
-        <div>
-          <div
-            style={{
-              fontFamily: font.code,
-              fontSize: type.micro,
-              letterSpacing: '.04em',
-              textTransform: 'uppercase',
-              color: color.redBright,
-              marginBottom: 14,
-            }}
-          >
-            {post.date} · {frames.length} {frames.length === 1 ? 'frame' : 'frames'}
+            {many && (
+              <>
+                <button
+                  type="button"
+                  className="post-arrow"
+                  aria-label="Previous"
+                  disabled={frame === 0}
+                  onClick={() => setFrame((f) => Math.max(f - 1, 0))}
+                  style={{ left: 10 }}
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="post-arrow"
+                  aria-label="Next"
+                  disabled={frame === frames.length - 1}
+                  onClick={() => setFrame((f) => Math.min(f + 1, frames.length - 1))}
+                  style={{ right: 10 }}
+                >
+                  ›
+                </button>
+
+                <div style={{ display: 'flex', gap: 7, justifyContent: 'center', marginTop: 16 }}>
+                  {frames.map((f, i) => (
+                    <button
+                      key={f.src + i}
+                      type="button"
+                      aria-label={`Frame ${i + 1}`}
+                      onClick={() => setFrame(i)}
+                      style={{
+                        width: i === frame ? 22 : 7,
+                        height: 7,
+                        padding: 0,
+                        border: 'none',
+                        borderRadius: 999,
+                        cursor: 'pointer',
+                        background: i === frame ? color.accent : color.inkGhost,
+                        transition: `width .4s ${ease.spring}, background .3s ease`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
-          <h2
-            style={{
-              fontFamily: font.display,
-              fontWeight: 800,
-              fontSize: type.displaySm,
-              lineHeight: 1,
-              color: color.ink,
-              margin: 0,
-            }}
-          >
-            {post.title}
-          </h2>
-          <p
-            style={{
-              fontFamily: font.mono,
-              fontSize: type.body,
-              lineHeight: 1.7,
-              color: color.inkSoft,
-              margin: '22px 0 0',
-              maxWidth: 460,
-            }}
-          >
-            {post.body}
-          </p>
+
+          <div>
+            {meta}
+            {title}
+            {body}
+          </div>
         </div>
-      </div>
+      ) : (
+        // ── pure-text post: a narrow, centred reading column ────────────────
+        <article
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-label={post.title}
+          className="post-read"
+          style={{
+            position: 'relative',
+            flexShrink: 0,
+            width: '100%',
+            maxWidth: 620,
+            margin: '0 auto',
+            padding: 'clamp(72px,12vh,120px) clamp(26px,7vw,40px) clamp(60px,10vw,100px)',
+          }}
+        >
+          {meta}
+          {title}
+          {body}
+        </article>
+      )}
     </div>,
     document.body,
+  )
+}
+
+/**
+ * Renders the post body: blank-line-separated paragraphs, with inline
+ * `![alt](src "caption")` images rendered full-width with an optional mono
+ * caption (§5.4). Kept deliberately small — no full markdown engine needed.
+ */
+function PostBody({ body }: { body: string }) {
+  const blocks = body.split(/\n\s*\n/)
+  const imgRe = /^!\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)$/
+
+  return (
+    <div className="post-body" style={{ margin: '20px 0 0' }}>
+      {blocks.map((raw, i) => {
+        const block = raw.trim()
+        const m = block.match(imgRe)
+        if (m) {
+          const [, alt, src, caption] = m
+          return (
+            <figure key={i} style={{ margin: '24px 0' }}>
+              <div
+                className="img-slot"
+                style={{
+                  position: 'relative',
+                  aspectRatio: '4 / 3',
+                  background: color.bgRaised,
+                  border: `0.5px solid ${color.line}`,
+                }}
+              >
+                <ImageSlot src={src} placeholder="drop image" alt={alt} />
+              </div>
+              {caption && (
+                <figcaption
+                  style={{
+                    fontFamily: font.mono,
+                    fontSize: type.mono,
+                    color: color.inkFaint,
+                    marginTop: 8,
+                  }}
+                >
+                  {caption}
+                </figcaption>
+              )}
+            </figure>
+          )
+        }
+        return (
+          <p
+            key={i}
+            style={{
+              fontFamily: font.serif,
+              fontSize: type.body,
+              lineHeight: 1.7,
+              color: color.inkMuted,
+              margin: '0 0 16px',
+            }}
+          >
+            {block}
+          </p>
+        )
+      })}
+    </div>
   )
 }

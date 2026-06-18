@@ -12,7 +12,7 @@ type Props = {
  * a multiply-blended halftone dot screen and an overlay-blended film grain
  * generated once on a canvas.
  */
-export function Textures({ halftone = true, grain = 52 }: Props) {
+export function Textures({ halftone = true, grain = 22 }: Props) {
   const grainRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export function Textures({ halftone = true, grain = 52 }: Props) {
           mixBlendMode: 'multiply',
           backgroundImage: 'radial-gradient(#000 0.7px, transparent 1.3px)',
           backgroundSize: '4px 4px',
-          opacity: halftone ? 0.06 : 0,
+          opacity: halftone ? 0.035 : 0,
         }}
       />
       <div
@@ -64,22 +64,6 @@ export function Textures({ halftone = true, grain = 52 }: Props) {
           mixBlendMode: 'overlay',
           backgroundRepeat: 'repeat',
           opacity: grain / 100,
-        }}
-      />
-      {/* CRT scanlines — fine horizontal lines, gently drifting */}
-      <div
-        aria-hidden
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 32,
-          pointerEvents: 'none',
-          mixBlendMode: 'overlay',
-          opacity: 0.34,
-          backgroundImage:
-            'repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0px, rgba(0,0,0,.16) 1px, transparent 1px, transparent 3px)',
-          backgroundSize: '100% 3px',
-          animation: 'scan 12s linear infinite',
         }}
       />
     </>

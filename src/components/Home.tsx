@@ -44,8 +44,8 @@ const dotStyle: CSSProperties = {
 }
 
 const coreStyle: CSSProperties = {
-  background: 'radial-gradient(circle,#fff 0%,#e84b3a 44%,rgba(216,65,47,0) 74%)',
-  boxShadow: '0 0 16px 3px rgba(232,75,58,.7)',
+  background: 'radial-gradient(circle,#e8e2d4 0%,#a23a2d 46%,rgba(140,47,36,0) 74%)',
+  boxShadow: '0 0 14px 2px rgba(140,47,36,.6)',
 }
 
 type Props = {
@@ -91,11 +91,10 @@ export function Home({ open, onOpen }: Props) {
         position: 'fixed',
         inset: 0,
         zIndex: 1,
-        // A warm-dark wash that lets the flowing ink (z-index 0) read clearly at
-        // the edges while staying denser at the centre, where the masthead +
-        // figure live, so the ink never fights the type.
+        // A near-black wash, denser at the centre where the masthead + figure
+        // live so the ambient layer never fights the type.
         background:
-          'radial-gradient(135% 120% at 50% 46%, rgba(20,16,10,.66) 0%, rgba(18,14,9,.5) 58%, rgba(15,12,8,.26) 100%)',
+          'radial-gradient(135% 120% at 50% 46%, rgba(22,22,22,.7) 0%, rgba(20,20,20,.5) 58%, rgba(17,17,16,.26) 100%)',
       }}
     >
       {/* edge vignette — pools light onto the central figure */}
@@ -107,7 +106,7 @@ export function Home({ open, onOpen }: Props) {
           zIndex: 5,
           pointerEvents: 'none',
           background:
-            'radial-gradient(120% 100% at 50% 44%, transparent 52%, rgba(8,6,3,.5) 100%)',
+            'radial-gradient(120% 100% at 50% 44%, transparent 52%, rgba(10,10,10,.55) 100%)',
         }}
       />
 
@@ -127,11 +126,11 @@ export function Home({ open, onOpen }: Props) {
         }}
       >
         <GlitchTitle
-          flicker
           style={{
             fontFamily: font.display,
-            fontWeight: 800,
+            fontWeight: 600,
             fontSize: 'clamp(44px,6vw,86px)',
+            letterSpacing: '-.02em',
             color: color.ink,
           }}
         >
@@ -140,12 +139,12 @@ export function Home({ open, onOpen }: Props) {
         <div
           style={{
             fontFamily: font.serif,
-            fontStyle: 'normal',
-            fontWeight: 500,
-            color: color.red,
-            fontSize: 'clamp(18px,2.2vw,26px)',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            color: color.inkMuted,
+            fontSize: 'clamp(18px,2.2vw,24px)',
             lineHeight: 1.1,
-            margin: '16px 0 0 2px',
+            margin: '14px 0 0 2px',
             letterSpacing: '.01em',
           }}
         >
@@ -153,17 +152,17 @@ export function Home({ open, onOpen }: Props) {
         </div>
         <div
           style={{
-            fontFamily: font.code,
+            fontFamily: font.mono,
             fontWeight: 400,
-            fontSize: 'clamp(12px,1.3vw,14px)',
+            fontSize: 'clamp(11px,1.2vw,13px)',
             letterSpacing: '.02em',
             lineHeight: 1.65,
-            color: color.slate,
+            color: color.inkFaint,
             marginTop: 26,
           }}
         >
-          Doctoral Researcher in Neurology
-          <div style={{ marginTop: 4 }}>@Charité – Universitätsmedizin Berlin</div>
+          Doctoral researcher in neurology
+          <div style={{ marginTop: 4 }}>@ Charité – Universitätsmedizin Berlin</div>
         </div>
 
         {/* phones only (.home-nav, hidden ≥600px): a real, tappable text menu —
@@ -178,11 +177,11 @@ export function Home({ open, onOpen }: Props) {
             >
               <span
                 style={{
-                  fontFamily: font.code,
+                  fontFamily: font.mono,
                   fontSize: 12,
                   letterSpacing: '.04em',
                   textTransform: 'uppercase',
-                  color: color.redBright,
+                  color: color.inkFaint,
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -191,7 +190,7 @@ export function Home({ open, onOpen }: Props) {
               <span
                 style={{
                   fontFamily: font.display,
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: 'clamp(20px,6vw,26px)',
                   lineHeight: 1,
                   color: color.ink,
@@ -296,7 +295,7 @@ export function Home({ open, onOpen }: Props) {
                 >
                   {p.side === 'right' ? (
                     <>
-                      <span style={{ color: color.redBright }}>{p.hint}</span>
+                      <span className="point-hint">{p.hint}</span>
                       <span style={{ color: color.inkFaint, margin: '0 7px' }}>→</span>
                       {p.title}
                     </>
@@ -304,7 +303,7 @@ export function Home({ open, onOpen }: Props) {
                     <>
                       {p.title}
                       <span style={{ color: color.inkFaint, margin: '0 7px' }}>←</span>
-                      <span style={{ color: color.redBright }}>{p.hint}</span>
+                      <span className="point-hint">{p.hint}</span>
                     </>
                   )}
                 </button>

@@ -1,23 +1,33 @@
 import { useState } from 'react'
-import { color, font, type } from '../../styles/theme'
+import { color } from '../../styles/theme'
 import { playground, type PlayPost } from '../../data/content'
 import { ImageSlot } from '../ImageSlot'
 import { PanelHeader } from '../PanelHeader'
 import { PostDetail } from './PostDetail'
 
+/** "2025-02-11" → "FEB 11, 2025" (mono, uppercased). */
+export function fmtDate(iso: string): string {
+  const d = new Date(iso + 'T00:00:00')
+  if (isNaN(d.getTime())) return iso
+  const m = d.toLocaleString('en-US', { month: 'short' }).toUpperCase()
+  return `${m} ${d.getDate()}, ${d.getFullYear()}`
+}
+
 export function PlaygroundPanel() {
   const [openId, setOpenId] = useState<string | null>(null)
   const openPost = playground.posts.find((p) => p.id === openId) ?? null
+
+  // newest first
+  const posts = [...playground.posts].sort((a, b) => b.date.localeCompare(a.date))
 
   return (
     <div>
       <PanelHeader kicker={playground.kicker} title={playground.title} lede={playground.lede} />
 
-      {/* A free-floating photo wall — cards scattered by their own x/y/rotate
-          rather than a tidy grid. On narrow screens .play-wall flips to a
-          single readable column (see global.css). */}
-      <div className="play-wall">
-        {playground.posts.map((post, i) => (
+      {/* A refined masonry: heights vary, but every card is on the grid at 0°.
+          Image posts get a cover; text posts become a quiet text card. */}
+      <div className="playground-grid">
+        {posts.map((post, i) => (
           <PostCard key={post.id} post={post} index={i} onOpen={() => setOpenId(post.id)} />
         ))}
       </div>
@@ -34,82 +44,54 @@ type CardProps = {
 }
 
 function PostCard({ post, index, onOpen }: CardProps) {
+  const frames = post.images ?? []
+  const hasCover = Boolean(post.cover)
+
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="play-card reveal"
+      className={`post-card reveal ${hasCover ? 'post-card--image' : 'post-card--text'}`}
       aria-label={`Open post: ${post.title}`}
-      style={{
-        // free placement on the wall; the parent is position:relative and tall
-        left: `${post.x}%`,
-        top: `${post.y}%`,
-        width: `${post.w}%`,
-        ['--rot' as string]: `${post.rotate}deg`,
-        ['--i' as string]: index + 3,
-      }}
+      style={{ ['--i' as string]: index + 3 }}
     >
-      <div className="play-card-float">
-       <div className="play-card-inner">
-        <div
-          className="img-slot"
-          style={{
-            position: 'relative',
-            aspectRatio: post.aspect,
-            background: post.frames[0].image ? color.bgSlot : 'rgba(236,228,206,.06)',
-            border: post.frames[0].image
-              ? `1px solid rgba(236,228,206,.26)`
-              : `1px dashed rgba(236,228,206,.28)`,
-          }}
-        >
-          <ImageSlot
-            src={post.frames[0].image}
-            placeholder={post.frames[0].placeholder}
-            alt={post.title}
-          />
-          {/* a small stacked-frames hint when the post holds more than one photo */}
-          {post.frames.length > 1 && (
-            <span className="play-stack" aria-hidden>
-              ▦ {post.frames.length}
-            </span>
-          )}
-        </div>
+      {hasCover ? (
+        <>
+          <div
+            className="img-slot post-card-cover"
+            style={{
+              position: 'relative',
+              aspectRatio: post.size === 'large' ? '4 / 5' : '1 / 1',
+              background: color.bgRaised,
+              border: `0.5px solid ${color.line}`,
+            }}
+          >
+            <ImageSlot src={post.cover!.src} placeholder="drop image" alt={post.cover!.alt} />
+            {frames.length > 1 && (
+              <span className="play-stack" aria-hidden>
+                {frames.length}
+              </span>
+            )}
+          </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-            gap: 10,
-            marginTop: 11,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: font.display,
-              fontWeight: 700,
-              fontSize: type.h3,
-              lineHeight: 1.04,
-              color: color.ink,
-              textAlign: 'left',
-            }}
-          >
-            {post.title}
-          </span>
-          <span
-            style={{
-              fontFamily: font.code,
-              fontSize: type.micro,
-              letterSpacing: '.03em',
-              color: color.inkFaint,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {post.date}
-          </span>
+          <div className="post-card-meta">
+            <span className="post-card-title">{post.title}</span>
+            <span className="post-card-date">{fmtDate(post.date)}</span>
+          </div>
+        </>
+      ) : (
+        <div className="post-card-text-body">
+          <span className="post-card-date post-card-date--top">{fmtDate(post.date)}</span>
+          <span className="post-card-title post-card-title--text">{post.title}</span>
+          <p className="post-card-excerpt">{firstLines(post.body)}</p>
         </div>
-       </div>
-      </div>
+      )}
     </button>
   )
+}
+
+/** A short serif excerpt for text cards — the first paragraph, trimmed. */
+function firstLines(body: string): string {
+  const first = body.split(/\n\s*\n/)[0].replace(/!\[.*?\]\(.*?\)/g, '').trim()
+  return first.length > 140 ? first.slice(0, 140).trimEnd() + '…' : first
 }

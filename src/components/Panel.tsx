@@ -26,10 +26,10 @@ export function Panel({ open, onClose, children }: Props) {
         overflowY: 'auto',
         overflowX: 'hidden',
         background: open
-          ? 'linear-gradient(180deg, rgba(9,7,4,.62) 0%, rgba(9,7,4,.78) 100%)'
-          : 'rgba(9,7,4,0)',
-        backdropFilter: open ? 'blur(16px) saturate(1.06)' : 'blur(0)',
-        WebkitBackdropFilter: open ? 'blur(16px) saturate(1.06)' : 'blur(0)',
+          ? 'linear-gradient(180deg, rgba(17,17,16,.74) 0%, rgba(17,17,16,.86) 100%)'
+          : 'rgba(17,17,16,0)',
+        backdropFilter: open ? 'blur(16px)' : 'blur(0)',
+        WebkitBackdropFilter: open ? 'blur(16px)' : 'blur(0)',
         opacity: open ? 1 : 0,
         pointerEvents: open ? 'auto' : 'none',
         transition:

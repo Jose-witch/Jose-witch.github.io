@@ -107,24 +107,23 @@ export function AmbientBackground() {
         float warmth = smoothstep(0.35, 0.75, warp.x);
         float coolth = smoothstep(0.32, 0.72, warp.y);
 
-        vec3 base = vec3(0.066, 0.05, 0.032);          // warm-dark ground
-        vec3 red  = vec3(0.847, 0.255, 0.184);
-        vec3 blue = vec3(0.243, 0.337, 0.498);
+        // refined brutalist: near-black ground, one faint brick smoke. No blue.
+        vec3 base = vec3(0.086, 0.086, 0.086);         // #161616
+        vec3 brick = vec3(0.549, 0.184, 0.141);        // #8c2f24
 
-        // centre column stays calmer — the ink thins where text + figure live
+        // centre column stays calmer — the smoke thins where text + figure live
         float edge = smoothstep(0.16, 0.62, abs(uv.x - 0.5) * 2.0);
-        float amt = ink * (0.35 + 0.65 * edge);
+        float amt = ink * (0.18 + 0.42 * edge);        // kept low / restrained
 
+        // a single ink, leaning on whichever flow component is stronger, so the
+        // smoke has structure without a second hue
+        float tone = max(warmth, coolth);
         vec3 col = base;
-        col = mix(col, col + red  * 0.9, amt * warmth);
-        col = mix(col, col + blue * 1.0, amt * coolth);
-        // a brighter filament where the two inks meet (the wet bleed line)
-        float seam = amt * (1.0 - abs(warmth - coolth)) * warmth * coolth;
-        col += vec3(0.5, 0.34, 0.26) * seam * 1.2;
+        col = mix(col, col + brick * 0.5, amt * tone);
 
-        // soft darkroom vignette
+        // soft vignette toward true black
         float vig = smoothstep(1.18, 0.32, distance(uv, vec2(0.5, 0.46)));
-        col *= mix(0.5, 1.0, vig);
+        col *= mix(0.46, 1.0, vig);
 
         // fine paper grain so it sits with the existing film-grain layer
         col += (hash(gl_FragCoord.xy + u_time) - 0.5) * 0.014;

@@ -1,3 +1,17 @@
+:root {
+  --bg: #161616;
+  --bg-raised: #1e1d1b;
+  --bg-sunken: #111110;
+  --ink: #e8e2d4;
+  --ink-muted: #9c958a;
+  --ink-faint: #5f5a52;
+  --accent: #8c2f24;
+  --accent-dim: #5c241d;
+  --line: #2e2a26;
+  --line-strong: #423c35;
+  --radius: 4px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -18,23 +32,23 @@ html {
 }
 
 body {
-  background: #16110b;
+  background: var(--bg);
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   font-kerning: normal;
   font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
 }
 
 ::selection {
-  background: #d8412f;
-  color: #f4ecda;
+  background: var(--accent);
+  color: var(--ink);
 }
 
-/* Display titles: Syne, set big & tight like a gallery poster. */
+/* Display titles: Space Grotesk, set big & tight. */
 .display-title {
   text-wrap: balance;
   letter-spacing: -0.02em;
-  line-height: 0.92;
+  line-height: 0.94;
 }
 
 /* ===== home stage: figure pushed to the right, text column on the left ===== */
@@ -93,13 +107,13 @@ body {
   padding: 12px 2px;
   background: transparent;
   border: none;
-  border-top: 1px solid var(--line, rgba(236, 228, 206, 0.16));
+  border-top: 1px solid var(--line, rgba(232, 226, 212, 0.16));
   cursor: pointer;
   text-align: left;
   transition: padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .home-nav-item:last-child {
-  border-bottom: 1px solid var(--line, rgba(236, 228, 206, 0.16));
+  border-bottom: 1px solid var(--line, rgba(232, 226, 212, 0.16));
 }
 .home-nav-item:active {
   padding-left: 8px;
@@ -107,7 +121,7 @@ body {
 
 /* ===== focus: a visible, on-brand ring for keyboard users only ===== */
 :focus-visible {
-  outline: 2px solid rgba(232, 75, 58, 0.9);
+  outline: 2px solid rgba(140, 47, 36, 0.9);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -122,30 +136,30 @@ body {
 @keyframes heartbeat {
   0% {
     transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 0 rgba(232, 75, 58, 0));
+    filter: brightness(1) drop-shadow(0 0 0 rgba(140, 47, 36, 0));
   }
   /* lub */
   8% {
     transform: scale(1.26);
-    filter: brightness(1.35) drop-shadow(0 0 9px rgba(232, 75, 58, 0.85));
+    filter: brightness(1.35) drop-shadow(0 0 9px rgba(140, 47, 36, 0.85));
   }
   16% {
     transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 2px rgba(232, 75, 58, 0.3));
+    filter: brightness(1) drop-shadow(0 0 2px rgba(140, 47, 36, 0.3));
   }
   /* dub */
   24% {
     transform: scale(1.14);
-    filter: brightness(1.2) drop-shadow(0 0 6px rgba(232, 75, 58, 0.6));
+    filter: brightness(1.2) drop-shadow(0 0 6px rgba(140, 47, 36, 0.6));
   }
   32% {
     transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 0 rgba(232, 75, 58, 0));
+    filter: brightness(1) drop-shadow(0 0 0 rgba(140, 47, 36, 0));
   }
   /* long diastolic rest */
   100% {
     transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 0 rgba(232, 75, 58, 0));
+    filter: brightness(1) drop-shadow(0 0 0 rgba(140, 47, 36, 0));
   }
 }
 .light-point {
@@ -166,8 +180,8 @@ body {
 .light-point-wrap:hover .core {
   animation-play-state: paused;
   transform: scale(1.32);
-  filter: brightness(1.5) drop-shadow(0 0 16px rgba(232, 75, 58, 0.95))
-    drop-shadow(0 0 28px rgba(232, 75, 58, 0.55));
+  filter: brightness(1.5) drop-shadow(0 0 16px rgba(140, 47, 36, 0.95))
+    drop-shadow(0 0 28px rgba(140, 47, 36, 0.55));
 }
 
 /* ===== point labels: visible by default, emphasised on hover ===== */
@@ -218,13 +232,13 @@ body {
   opacity: 0.82;
   transform: translateX(0);
   border-radius: 3px;
-  background: rgba(9, 7, 4, 0.34);
+  background: rgba(8, 8, 8, 0.34);
   /* reset native <button> chrome — the label is now a real clickable button */
   border: 1px solid transparent;
   letter-spacing: inherit;
   line-height: 1.2;
-  text-shadow: 0 1px 3px rgba(6, 4, 2, 0.98), 0 0 6px rgba(6, 4, 2, 0.95),
-    0 0 12px rgba(6, 4, 2, 0.8);
+  text-shadow: 0 1px 3px rgba(8, 8, 8, 0.98), 0 0 6px rgba(8, 8, 8, 0.95),
+    0 0 12px rgba(8, 8, 8, 0.8);
   transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease,
     transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -243,66 +257,19 @@ body {
 .light-point:focus-visible + .point-label {
   /* emphasised: full opacity + the glass pill returns */
   opacity: 1;
-  background: rgba(9, 7, 4, 0.6);
-  border-color: var(--line, rgba(236, 228, 206, 0.16));
+  background: rgba(8, 8, 8, 0.6);
+  border-color: var(--line, rgba(232, 226, 212, 0.16));
   animation-play-state: paused;
   transform: translateX(0) scale(1.03);
 }
 
-/* ===== glitch-art title: occasional, brief CMYK shear on the colour plates ===== */
-@keyframes glitchRed {
-  0%,
-  88%,
-  100% {
-    transform: translate(3px, 1.65px);
-    clip-path: none;
-  }
-  89% {
-    transform: translate(6px, 1.65px);
-    clip-path: inset(14% 0 56% 0);
-  }
-  91% {
-    transform: translate(-3px, 1.65px);
-    clip-path: inset(62% 0 10% 0);
-  }
-  93% {
-    transform: translate(4px, 1.65px);
-    clip-path: inset(34% 0 40% 0);
-  }
-  95% {
-    transform: translate(3px, 1.65px);
-    clip-path: none;
-  }
+/* ===== on-bone point hint: faint by default, accent only on hover ===== */
+.point-hint {
+  color: var(--ink-faint);
+  transition: color 0.3s ease;
 }
-@keyframes glitchBlue {
-  0%,
-  88%,
-  100% {
-    transform: translate(-3px, -1.65px);
-    clip-path: none;
-  }
-  90% {
-    transform: translate(-6px, -1.65px);
-    clip-path: inset(42% 0 24% 0);
-  }
-  92% {
-    transform: translate(4px, -1.65px);
-    clip-path: inset(10% 0 68% 0);
-  }
-  94% {
-    transform: translate(-4px, -1.65px);
-    clip-path: inset(56% 0 16% 0);
-  }
-  96% {
-    transform: translate(-3px, -1.65px);
-    clip-path: none;
-  }
-}
-.glitch-red {
-  animation: glitchRed 7s steps(1, end) infinite;
-}
-.glitch-blue {
-  animation: glitchBlue 7s steps(1, end) infinite;
+.light-point-wrap:hover .point-hint {
+  color: var(--accent);
 }
 
 /* ===== content reveal: a soft rise-in, staggered by inline --i ===== */
@@ -322,19 +289,7 @@ body {
   animation-delay: calc(var(--i, 0) * 80ms + 120ms);
 }
 
-/* moving scanline sweep over the whole stage */
-@keyframes scan {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 100vh;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .glitch-red,
-  .glitch-blue,
   .light-point .core,
   .point-label,
   .reveal {
@@ -357,12 +312,12 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(236, 228, 206, 0.14);
+  background: rgba(232, 226, 212, 0.14);
   border-radius: 999px;
   transition: background 0.3s ease;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(236, 228, 206, 0.3);
+  background: rgba(232, 226, 212, 0.3);
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
@@ -370,7 +325,7 @@ body {
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(236, 228, 206, 0.16) transparent;
+  scrollbar-color: rgba(232, 226, 212, 0.16) transparent;
 }
 
 /* ===== oversized bare ✕ close button — no disc, no border. Drawn light but
@@ -378,7 +333,7 @@ body {
    reads as an intentional, artful mark rather than UI chrome. ===== */
 .panel-close,
 .post-close {
-  text-shadow: 0 2px 18px rgba(7, 5, 3, 0.92), 0 0 6px rgba(7, 5, 3, 0.85);
+  text-shadow: 0 2px 18px rgba(8, 8, 8, 0.92), 0 0 6px rgba(8, 8, 8, 0.85);
 }
 .panel-close .x-glyph {
   display: block;
@@ -386,7 +341,7 @@ body {
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .panel-close:hover {
-  color: #f4ecda !important;
+  color: #e8e2d4 !important;
 }
 /* a post is open over the panel — hide the panel's own ✕ so it can't be
    clicked/tabbed through to home; PostDetail's ✕ takes its place */
@@ -396,31 +351,6 @@ body {
 }
 .panel-close:hover .x-glyph {
   transform: rotate(90deg);
-}
-
-/* ===== contact lines (About) — a quiet colophon, not a table ===== */
-.about-doors {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(10px, 1.4vw, 16px);
-}
-.about-doors .door-line {
-  position: relative;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0% 1px;
-  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.3s ease;
-}
-.about-doors .door-line:hover {
-  color: #e84b3a;
-  background-size: 100% 1px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .about-doors .door-line {
-    transition: color 0.3s ease;
-  }
 }
 
 /* ===== image slots: gentle lift + reveal on hover ===== */
@@ -437,110 +367,113 @@ body {
 .img-slot:hover {
   transform: translateY(-4px);
   box-shadow: 0 18px 44px -22px rgba(0, 0, 0, 0.85);
-  border-color: rgba(236, 228, 206, 0.42) !important;
+  border-color: rgba(232, 226, 212, 0.42) !important;
 }
 .img-slot:hover img {
   transform: scale(1.045);
   filter: saturate(1.06);
 }
 
-/* ===== playground: a free-floating photo wall ===== */
-/* Cards are absolutely placed by their own x/y/rotate so the wall reads like a
-   pinned-up board, not a grid. The container reserves height for that. */
-.play-wall {
-  position: relative;
-  width: 100%;
-  /* nudge the whole board down off the lede so it sits lower / more centred in
-     the viewport rather than crowding the header */
-  margin-top: clamp(24px, 6vh, 80px);
-  /* tall enough to hold the lowest card (y≈50% + its own height) plus air */
-  height: clamp(620px, 92vw, 1180px);
+/* ===== playground: a refined masonry (§5.2) =====
+   CSS columns give heights-vary masonry; every card sits on the grid at 0°.
+   No random tilt, no float — the precision is the point. */
+.playground-grid {
+  columns: 3 240px;
+  column-gap: var(--space-md, 24px);
+  margin-top: clamp(20px, 4vh, 48px);
 }
-/* Three nested layers, each owning ONE animated property so they never clash:
-   .play-card        → absolute placement + the reveal rise-in (opacity)
-   .play-card-float  → the idle drift (transform: translateY, keyframed)
-   .play-card-inner  → resting tilt + hover lift (transform, transitioned) */
-.play-card {
-  position: absolute;
+.post-card {
+  break-inside: avoid;
   display: block;
+  width: 100%;
+  margin: 0 0 var(--space-md, 24px);
   padding: 0;
-  margin: 0;
   border: none;
   background: transparent;
+  text-align: left;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.play-card-float {
-  animation: cardFloat 9s ease-in-out infinite;
-  animation-delay: calc(var(--i, 0) * -1.3s);
-  will-change: transform;
+
+/* image card: cover + a meta row beneath */
+.post-card-cover {
+  border-radius: var(--radius);
 }
-.play-card-inner {
-  transform: rotate(var(--rot, 0deg));
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.4s ease;
+.post-card-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 11px;
 }
-.play-card:hover {
-  z-index: 5;
+.post-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 1.9vw, 21px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
-.play-card:hover .play-card-float {
-  animation-play-state: paused;
+.post-card-date {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
 }
-.play-card:hover .play-card-inner {
-  transform: rotate(0deg) translateY(-7px) scale(1.035);
+
+/* text card: a quiet blog tile on the raised ground */
+.post-card--text .post-card-text-body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-raised);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-sm, 16px);
+  transition: border-color 0.35s ease;
 }
-.play-card:focus-visible .play-card-inner {
-  transform: rotate(0deg) scale(1.02);
+.post-card-date--top {
+  margin-bottom: 10px;
 }
+.post-card-title--text {
+  margin-bottom: 8px;
+}
+.post-card-excerpt {
+  margin: 0;
+  font-family: 'Newsreader', serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+/* the single accent moment: hover borders the card brick-red. (Beats the
+   generic .img-slot:hover border, hence !important.) */
+.post-card:hover .post-card-cover,
+.post-card:hover .post-card-text-body {
+  border-color: var(--accent) !important;
+}
+
 /* small "more frames" chip in the corner of a multi-photo cover */
 .play-stack {
   position: absolute;
   top: 9px;
   right: 9px;
   z-index: 2;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: 'Space Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: #f4ecda;
+  color: var(--ink);
   padding: 3px 7px;
-  border-radius: 3px;
-  background: rgba(9, 7, 4, 0.6);
+  border-radius: var(--radius);
+  background: rgba(8, 8, 8, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
-@keyframes cardFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-9px);
-  }
-}
 
-/* Narrow screens: abandon the scatter for a clean, readable single column. */
 @media (max-width: 760px) {
-  .play-wall {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(30px, 8vw, 44px);
-  }
-  .play-card {
-    position: static;
-    width: 100% !important;
-    left: auto !important;
-    top: auto !important;
-  }
-  .play-card-float {
-    animation: none;
-  }
-  .play-card-inner {
-    transform: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .play-card-float {
-    animation: none;
+  .playground-grid {
+    columns: 1;
   }
 }
 
@@ -555,6 +488,16 @@ body {
     transform: translateY(0) scale(1);
   }
 }
+/* the post meta line — mono, accent: date · N frames / N min read */
+.post-meta-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
 /* ===== post-takeover controls — bare, borderless glyphs that float fixed at
    the top edge through any scroll. A soft ink shadow (no disc, no capsule)
    keeps them legible even where they cross a bright photo. ===== */
@@ -575,11 +518,11 @@ body {
 }
 /* keyboard users still get a visible focus ring; pointer clicks don't */
 .post-close:focus-visible {
-  outline: 1px solid rgba(236, 228, 206, 0.5);
+  outline: 1px solid rgba(232, 226, 212, 0.5);
   outline-offset: 3px;
 }
 .post-close:hover {
-  color: #f4ecda !important;
+  color: #e8e2d4 !important;
 }
 .post-close .x-glyph {
   display: block;
@@ -602,9 +545,9 @@ body {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 26px;
   line-height: 1;
-  color: #f4ecda;
-  background: rgba(9, 7, 4, 0.45);
-  border: 1px solid rgba(236, 228, 206, 0.18);
+  color: #e8e2d4;
+  background: rgba(8, 8, 8, 0.45);
+  border: 1px solid rgba(232, 226, 212, 0.18);
   border-radius: 50%;
   cursor: pointer;
   backdrop-filter: blur(6px);
@@ -613,7 +556,7 @@ body {
   z-index: 3;
 }
 .post-arrow:hover:not(:disabled) {
-  background: rgba(216, 65, 47, 0.85);
+  background: rgba(140, 47, 36, 0.85);
   transform: scale(1.08);
 }
 .post-arrow:disabled {
@@ -660,8 +603,8 @@ body {
   width: 100%;
   background: linear-gradient(
     90deg,
-    var(--c-red, #e84b3a) 0%,
-    var(--c-red, #e84b3a) 70%,
+    var(--c-red, #a23a2d) 0%,
+    var(--c-red, #a23a2d) 70%,
     transparent 100%
   );
   opacity: 0;
@@ -677,7 +620,7 @@ body {
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .brain-row:hover .brain-note {
-  color: rgba(244, 236, 218, 0.85);
+  color: rgba(232, 226, 212, 0.85);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -687,55 +630,53 @@ body {
   }
 }
 
-/* Narrow screens: stack the group label above its list. */
+/* Narrow screens: stack the section label above its content (Brain + About,
+   which both use the 88px label + content template grid). */
 @media (max-width: 720px) {
-  .brain-section {
+  .brain-section,
+  .about-body,
+  .about-row {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 12px !important;
   }
 }
 
-/* ===== about: a composed, magazine-like spread ===== */
-/* The portrait is floated so the running bio wraps around it — an editorial
-   column, not a rigid CV grid. The tilt + hanging caption add hand-set feel. */
-.about-spread::after {
-  content: "";
-  display: block;
-  clear: both;
+/* ===== about: bio row — portrait beside the running serif bio ===== */
+.about-bio-row {
+  display: grid;
+  grid-template-columns: clamp(132px, 18vw, 188px) minmax(0, 1fr);
+  gap: clamp(24px, 3.4vw, 48px);
+  align-items: start;
 }
 .about-portrait {
-  float: left;
-  width: clamp(122px, 17vw, 184px);
-  margin: 6px clamp(26px, 3.4vw, 48px) clamp(32px, 4vw, 40px) 0;
-  transform: rotate(-0.8deg);
+  /* squared, on the grid — no tilt (refined brutalist) */
 }
-/* override the generic .img-slot hover lift so the tilt is preserved */
-.about-portrait.img-slot:hover {
-  transform: rotate(-0.8deg) translateY(-4px);
-}
-
-/* Meta facts: a calm row of specifications — label over value, evenly set,
-   the way a gallery lists medium / dimensions / year beneath a work. */
-.about-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(28px, 5vw, 64px);
-}
-
-@media (max-width: 720px) {
+@media (max-width: 560px) {
+  .about-bio-row {
+    grid-template-columns: 1fr;
+    gap: clamp(36px, 9vw, 48px);
+  }
   .about-portrait {
-    float: none;
-    width: clamp(120px, 42vw, 168px);
-    margin: 0 0 clamp(36px, 8vw, 48px);
-  }
-  .about-facts {
-    flex-direction: column;
-    gap: clamp(22px, 6vw, 28px);
+    width: clamp(140px, 46vw, 188px);
   }
 }
 
+/* the door / link hover underline, shared with the About link rows */
+.door-line {
+  position: relative;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s ease;
+}
+.door-line:hover {
+  color: var(--accent);
+  background-size: 100% 1px;
+}
 @media (prefers-reduced-motion: reduce) {
-  .about-portrait {
-    transform: none !important;
+  .door-line {
+    transition: color 0.3s ease;
   }
 }

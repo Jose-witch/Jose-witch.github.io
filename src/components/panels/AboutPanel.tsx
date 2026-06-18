@@ -3,133 +3,148 @@ import { about } from '../../data/content'
 import { ImageSlot } from '../ImageSlot'
 import { PanelHeader } from '../PanelHeader'
 
+/**
+ * About, rebuilt onto the shared template (§4): breadcrumb → title → serif
+ * lede, then a two-column body where each fact (currently / speaks / elsewhere
+ * / work / personal) is a mono section-label on the left with its content on
+ * the right — exactly like Brain's ongoing/finished archive.
+ */
 export function AboutPanel() {
+  let order = 3
+
   return (
     <div>
-      <PanelHeader
-        kicker={about.kicker}
-        title={about.title}
-        titleMargin="0 0 clamp(30px,4vw,46px)"
-      />
+      <PanelHeader kicker={about.kicker} title={about.title} lede={about.lede} />
 
-      {/* A composed spread: the portrait floats into the running text, so the
-          bio wraps around it like a magazine column rather than sitting in a
-          rigid two-up grid. */}
-      <div className="about-spread reveal" style={{ ['--i' as string]: 2 }}>
-        <div
-          className="about-portrait img-slot"
-          style={{
-            position: 'relative',
-            aspectRatio: '3 / 4',
-            background: color.bgSlot,
-            border: `1px solid rgba(236,228,206,.3)`,
-          }}
-        >
-          <ImageSlot src={about.portrait.image} placeholder={about.portrait.placeholder} alt="portrait" />
-          {/* a small plate caption, the way a work is labelled */}
-          <span
-            style={{
-              position: 'absolute',
-              left: 0,
-              bottom: -24,
-              fontFamily: font.code,
-              fontSize: type.micro,
-              color: color.slate,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Yunyou Tang, self-portrait
-          </span>
-        </div>
-
-        <p
-          style={{
-            margin: 0,
-            fontFamily: font.serif,
-            fontStyle: 'normal',
-            fontWeight: 400,
-            fontSize: type.bodyLg,
-            lineHeight: 1.62,
-            color: color.ink,
-          }}
-        >
-          {about.bio}
-        </p>
-      </div>
-
-      {/* Meta — scattered as loose tags with hanging red labels, not a table. */}
-      <ul
-        className="about-facts reveal"
+      {/* bio + portrait — the opening row of the body, on the same grid */}
+      <div
+        className="about-body page-body reveal"
         style={{
-          listStyle: 'none',
-          margin: 'clamp(48px,6vw,76px) 0 clamp(40px,5vw,60px)',
-          padding: 0,
-          ['--i' as string]: 3,
+          display: 'grid',
+          gridTemplateColumns: '88px minmax(0, 1fr)',
+          gap: 'clamp(20px,3vw,48px)',
+          alignItems: 'start',
+          borderTop: `0.5px solid ${color.line}`,
+          paddingTop: 24,
+          ['--i' as string]: order++,
         }}
       >
-        {about.facts.map((f) => (
-          <li key={f.label}>
-            <span
-              style={{
-                display: 'block',
-                fontFamily: font.code,
-                fontSize: type.micro,
-                letterSpacing: '.01em',
-                color: color.slate,
-                marginBottom: 6,
-              }}
-            >
-              {f.label}
-            </span>
-            <span
-              style={{
-                fontFamily: font.serif,
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: type.body,
-                lineHeight: 1.3,
-                color: color.ink,
-              }}
-            >
-              {f.value}
-            </span>
-          </li>
-        ))}
-      </ul>
+        <div
+          className="section-label"
+          style={{
+            fontFamily: font.mono,
+            fontSize: type.mono,
+            letterSpacing: '.05em',
+            textTransform: 'uppercase',
+            color: color.accent,
+          }}
+        >
+          who
+        </div>
 
-      {/* The doors — set as a quiet line of running text, like a gallery
-          colophon, rather than a ruled contact table. */}
-      <div
-        className="about-doors reveal"
-        style={{ ['--i' as string]: 4 }}
-      >
-        {about.doors.map((door) => (
-          <p key={door.email} style={{ margin: 0 }}>
+        <div className="about-bio-row">
+          <div
+            className="about-portrait img-slot"
+            style={{
+              position: 'relative',
+              aspectRatio: '3 / 4',
+              background: color.bgRaised,
+              border: `0.5px solid ${color.line}`,
+            }}
+          >
+            <ImageSlot src={about.portrait.src} placeholder="drop image" alt={about.portrait.alt} />
             <span
               style={{
-                fontFamily: font.code,
-                fontSize: type.micro,
-                letterSpacing: '.01em',
-                color: color.slate,
+                position: 'absolute',
+                left: 0,
+                bottom: -22,
+                fontFamily: font.mono,
+                fontSize: type.mono,
+                color: color.inkFaint,
+                whiteSpace: 'nowrap',
               }}
             >
-              {door.kicker}
-            </span>{' '}
-            <a
-              href={`mailto:${door.email}`}
-              className="door-line"
-              style={{
-                fontFamily: font.serif,
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: type.body,
-                color: color.ink,
-                textDecoration: 'none',
-              }}
-            >
-              {door.email}
-            </a>
+              {about.portraitCaption}
+            </span>
+          </div>
+
+          <p
+            style={{
+              margin: 0,
+              fontFamily: font.serif,
+              fontWeight: 400,
+              fontSize: type.bodyLg,
+              lineHeight: 1.62,
+              color: color.ink,
+            }}
+          >
+            {about.bio}
           </p>
+        </div>
+      </div>
+
+      {/* the fact rows — one mono label per row, content on the right */}
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {about.sections.map((s) => (
+          <section
+            key={s.id}
+            className="about-row page-body reveal"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '88px minmax(0, 1fr)',
+              gap: 'clamp(20px,3vw,48px)',
+              alignItems: 'baseline',
+              borderTop: `0.5px solid ${color.line}`,
+              padding: 'clamp(18px,2.2vw,26px) 0',
+              ['--i' as string]: order++,
+            }}
+          >
+            <div
+              className="section-label"
+              style={{
+                fontFamily: font.mono,
+                fontSize: type.mono,
+                letterSpacing: '.05em',
+                textTransform: 'uppercase',
+                color: color.accent,
+              }}
+            >
+              {s.label}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {s.lines?.map((line) => (
+                <span
+                  key={line}
+                  style={{
+                    fontFamily: font.serif,
+                    fontSize: type.body,
+                    lineHeight: 1.4,
+                    color: color.ink,
+                  }}
+                >
+                  {line}
+                </span>
+              ))}
+              {s.links?.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="door-line"
+                  style={{
+                    fontFamily: font.serif,
+                    fontSize: type.body,
+                    lineHeight: 1.4,
+                    color: color.ink,
+                    textDecoration: 'none',
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </section>
         ))}
       </div>
     </div>

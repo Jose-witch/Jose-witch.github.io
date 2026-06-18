@@ -13,7 +13,7 @@ type Props = {
 }
 
 const glowFilter = (g: number) =>
-  `brightness(${1 + g * 0.16}) drop-shadow(0 0 ${10 + g * 26}px rgba(216,65,47,.28)) drop-shadow(0 0 ${6 + g * 14}px rgba(57,80,127,.22))`
+  `brightness(${1 + g * 0.12}) drop-shadow(0 0 ${10 + g * 24}px rgba(140,47,36,.2))`
 
 export function SkeletonImage({ glow = 0.5, style }: Props) {
   return (

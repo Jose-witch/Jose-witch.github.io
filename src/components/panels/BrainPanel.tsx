@@ -10,49 +10,42 @@ export function BrainPanel() {
     <div>
       <PanelHeader kicker={brain.kicker} title={brain.title} lede={brain.lede} />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(48px,6vw,84px)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px,5vw,72px)' }}>
         {brain.groups.map((group) => (
           <section
             key={group.id}
-            className="brain-section"
+            className="brain-section page-body"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'minmax(120px, 1fr) minmax(0, 4fr)',
-              gap: 'clamp(20px,4vw,64px)',
+              gridTemplateColumns: '88px minmax(0, 1fr)',
+              gap: 'clamp(20px,3vw,48px)',
               alignItems: 'start',
+              borderTop: `0.5px solid ${color.line}`,
+              paddingTop: 24,
             }}
           >
-            <header
-              className="reveal"
-              style={{ ['--i' as string]: order++ }}
-            >
+            <header className="reveal" style={{ ['--i' as string]: order++ }}>
               <div
+                className="section-label"
                 style={{
-                  fontFamily: font.code,
-                  fontWeight: 500,
-                  fontSize: type.caption,
-                  letterSpacing: '.04em',
+                  fontFamily: font.mono,
+                  fontWeight: 400,
+                  fontSize: type.mono,
+                  letterSpacing: '.05em',
                   textTransform: 'uppercase',
-                  color: color.redBright,
+                  color: color.accent,
                   position: 'sticky',
                   top: 24,
                 }}
               >
                 {group.label}
-                <span style={{ color: color.inkGhost, marginLeft: 8 }}>
+                <span style={{ color: color.inkFaint, marginLeft: 8 }}>
                   {String(group.entries.length).padStart(2, '0')}
                 </span>
               </div>
             </header>
 
-            <ol
-              style={{
-                listStyle: 'none',
-                margin: 0,
-                padding: 0,
-                borderTop: `1px solid ${color.line}`,
-              }}
-            >
+            <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {group.entries.map((entry, i) => (
                 <li
                   key={entry.id}
@@ -61,18 +54,18 @@ export function BrainPanel() {
                     ['--i' as string]: order++,
                     display: 'grid',
                     gridTemplateColumns: '1fr auto',
-                    gap: '8px 24px',
-                    padding: 'clamp(18px,2.4vw,30px) 0',
-                    borderBottom: `1px solid ${color.lineSoft}`,
+                    gap: '6px 24px',
+                    padding: 'clamp(18px,2.2vw,28px) 0',
+                    borderBottom: `0.5px solid ${color.line}`,
                     transition: `background ${dur.fast} ${ease.soft}`,
                   }}
                 >
                   <div
                     style={{
-                      fontFamily: font.code,
-                      fontSize: type.micro,
+                      fontFamily: font.mono,
+                      fontSize: type.mono,
                       letterSpacing: '.04em',
-                      color: color.redBright,
+                      color: color.accent,
                       gridColumn: '1 / 2',
                     }}
                   >
@@ -82,10 +75,11 @@ export function BrainPanel() {
                   <div
                     className="brain-note"
                     style={{
-                      fontFamily: font.code,
-                      fontSize: type.micro,
+                      fontFamily: font.mono,
+                      fontSize: type.mono,
                       letterSpacing: '.04em',
-                      color: color.slate,
+                      textTransform: 'uppercase',
+                      color: color.inkFaint,
                       textAlign: 'right',
                       whiteSpace: 'nowrap',
                       gridColumn: '2 / 3',
@@ -100,10 +94,10 @@ export function BrainPanel() {
                       margin: '6px 0 0',
                       gridColumn: '1 / -1',
                       fontFamily: font.display,
-                      fontWeight: 700,
-                      fontSize: 'clamp(24px,3.4vw,40px)',
+                      fontWeight: 600,
+                      fontSize: 'clamp(22px,3vw,36px)',
                       lineHeight: 1.05,
-                      letterSpacing: '-.01em',
+                      letterSpacing: '-.02em',
                       color: color.ink,
                     }}
                   >
@@ -112,13 +106,13 @@ export function BrainPanel() {
 
                   <p
                     style={{
-                      margin: '4px 0 0',
+                      margin: '6px 0 0',
                       gridColumn: '1 / -1',
                       maxWidth: 560,
                       fontFamily: font.serif,
                       fontSize: type.body,
                       lineHeight: 1.55,
-                      color: 'rgba(244,236,218,.72)',
+                      color: color.inkMuted,
                     }}
                   >
                     {entry.body}
