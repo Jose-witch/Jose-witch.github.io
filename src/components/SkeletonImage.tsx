@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import skeleton from '../assets/image2.png'
+import skeleton from '../assets/skeleton.png'
 
 /**
  * The riso/engraving skeleton — a complete, symmetric 3/4 rear-view figure

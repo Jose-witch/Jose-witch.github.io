@@ -153,17 +153,62 @@ export function Home({ open, onOpen }: Props) {
         </div>
         <div
           style={{
-            fontFamily: font.mono,
-            fontWeight: 500,
-            fontSize: 'clamp(13px,1.4vw,15px)',
-            letterSpacing: '.04em',
+            fontFamily: font.code,
+            fontWeight: 400,
+            fontSize: 'clamp(12px,1.3vw,14px)',
+            letterSpacing: '.02em',
             lineHeight: 1.65,
-            color: color.inkFaint,
+            color: color.slate,
             marginTop: 26,
           }}
         >
           Doctoral Researcher in Neurology
+          <div style={{ marginTop: 4 }}>@Charité – Universitätsmedizin Berlin</div>
         </div>
+
+        {/* phones only (.home-nav, hidden ≥600px): a real, tappable text menu —
+            the on-bone dots are too small to hit reliably on touch */}
+        <nav className="home-nav" aria-label="Sections" style={{ marginTop: 30 }}>
+          {POINTS.map((p) => (
+            <button
+              key={p.view}
+              type="button"
+              className="home-nav-item"
+              onClick={() => onOpen(p.view)}
+            >
+              <span
+                style={{
+                  fontFamily: font.code,
+                  fontSize: 12,
+                  letterSpacing: '.04em',
+                  textTransform: 'uppercase',
+                  color: color.redBright,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {p.hint}
+              </span>
+              <span
+                style={{
+                  fontFamily: font.display,
+                  fontWeight: 700,
+                  fontSize: 'clamp(20px,6vw,26px)',
+                  lineHeight: 1,
+                  color: color.ink,
+                  marginLeft: 'auto',
+                }}
+              >
+                {p.title}
+              </span>
+              <span
+                aria-hidden
+                style={{ color: color.inkFaint, fontFamily: font.code, fontSize: 14 }}
+              >
+                →
+              </span>
+            </button>
+          ))}
+        </nav>
       </div>
 
       {/* skeleton stage — biased right on wide screens (see .home-stage) */}
@@ -179,6 +224,7 @@ export function Home({ open, onOpen }: Props) {
         }}
       >
         <div
+          className="home-figure"
           style={{
             position: 'relative',
             aspectRatio: '1024 / 1536',
@@ -237,9 +283,9 @@ export function Home({ open, onOpen }: Props) {
                     ...(p.side === 'right' ? { left: 30 } : { right: 30 }),
                     whiteSpace: 'nowrap',
                     textAlign: p.side === 'right' ? 'left' : 'right',
-                    fontFamily: font.mono,
-                    fontSize: 15,
-                    letterSpacing: '.02em',
+                    fontFamily: font.code,
+                    fontSize: 13.5,
+                    letterSpacing: '.01em',
                     color: color.ink,
                     padding: '5px 11px',
                     backdropFilter: 'blur(6px)',

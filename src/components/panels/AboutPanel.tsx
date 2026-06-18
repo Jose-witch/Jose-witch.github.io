@@ -25,16 +25,16 @@ export function AboutPanel() {
             border: `1px solid rgba(236,228,206,.3)`,
           }}
         >
-          <ImageSlot placeholder={about.portrait.placeholder} alt="portrait" />
+          <ImageSlot src={about.portrait.image} placeholder={about.portrait.placeholder} alt="portrait" />
           {/* a small plate caption, the way a work is labelled */}
           <span
             style={{
               position: 'absolute',
               left: 0,
               bottom: -24,
-              fontFamily: font.mono,
+              fontFamily: font.code,
               fontSize: type.micro,
-              color: color.inkFaint,
+              color: color.slate,
               whiteSpace: 'nowrap',
             }}
           >
@@ -72,10 +72,10 @@ export function AboutPanel() {
             <span
               style={{
                 display: 'block',
-                fontFamily: font.mono,
+                fontFamily: font.code,
                 fontSize: type.micro,
                 letterSpacing: '.01em',
-                color: color.inkFaint,
+                color: color.slate,
                 marginBottom: 6,
               }}
             >
@@ -107,10 +107,10 @@ export function AboutPanel() {
           <p key={door.email} style={{ margin: 0 }}>
             <span
               style={{
-                fontFamily: font.mono,
+                fontFamily: font.code,
                 fontSize: type.micro,
                 letterSpacing: '.01em',
-                color: color.inkFaint,
+                color: color.slate,
               }}
             >
               {door.kicker}

@@ -18,6 +18,10 @@ export const color = {
   redBright: '#e84b3a',
   blue: '#3e567f',
   blueBright: '#5b7099',
+  /** Anatomical slate — a cold blue-grey anchor for secondary text, so the
+   *  warm red reads hotter against it. */
+  slate: '#7a8b8a',
+  slateSoft: 'rgba(122,139,138,.72)',
   bone: '#ece4ce',
 } as const
 
@@ -28,6 +32,9 @@ export const font = {
   serif: "'Fraunces', 'Old Standard TT', serif",
   /** Space Grotesk — contemporary neutral sans for labels, meta, body. */
   mono: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif",
+  /** JetBrains Mono — true monospace for instrument-readout tags: kickers,
+   *  status notes, index numerals. Reads like a lab log / a machine display. */
+  code: "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace",
   script: "'Caveat', cursive",
 } as const
 

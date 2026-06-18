@@ -44,19 +44,65 @@ body {
   justify-content: flex-end;
   padding-right: clamp(2vw, 7vw, 160px);
 }
-/* Narrow screens: not enough room for a side-by-side — recenter the figure and
-   let the text sit over the top, as before. */
+/* Narrow screens: not enough room for the figure AND its outward-reaching dot
+   labels without them colliding with the masthead (or running off-screen). So
+   below this width the on-bone labels are dropped entirely and a real, tappable
+   text menu drives navigation — guaranteeing label/text never overlap at any
+   size. The figure becomes a quiet, non-interactive backdrop behind the type. */
+.home-nav {
+  display: none;
+}
 @media (max-width: 860px) {
   .home-stage {
     justify-content: center;
+    align-items: flex-end !important;
     padding-right: 0;
+    padding-bottom: clamp(8px, 3vh, 28px);
   }
   /* masthead returns to the top-left, full readable width */
   .home-masthead {
-    top: clamp(26px, 5vh, 56px) !important;
+    top: clamp(20px, 4vh, 48px) !important;
     transform: none !important;
-    max-width: min(86vw, 520px) !important;
+    max-width: min(92vw, 560px) !important;
   }
+  /* the figure: a faded backdrop, shorter, anchored to the bottom edge, and
+     pushed behind the masthead so it can never sit over the type */
+  .home-figure {
+    height: auto !important;
+    width: min(66vw, 340px) !important;
+    max-height: 52vh !important;
+    opacity: 0.4;
+  }
+  /* drop the on-bone dots + labels; the text menu takes over completely */
+  .home-figure .light-point-wrap {
+    display: none;
+  }
+  .home-nav {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* a tappable text menu — generous 48px-min rows, one per section */
+.home-nav-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 2px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line, rgba(236, 228, 206, 0.16));
+  cursor: pointer;
+  text-align: left;
+  transition: padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.home-nav-item:last-child {
+  border-bottom: 1px solid var(--line, rgba(236, 228, 206, 0.16));
+}
+.home-nav-item:active {
+  padding-left: 8px;
 }
 
 /* ===== focus: a visible, on-brand ring for keyboard users only ===== */
@@ -69,16 +115,37 @@ body {
   outline: none;
 }
 
-/* ===== navigation light points: a calm breathing core + slow halo ring ===== */
-@keyframes corePulse {
-  0%,
+/* ===== navigation light points: a cardiac lub-dub pulse, not a metronome =====
+   The rhythm is two quick systolic beats (lub-dub) early in the cycle, then a
+   long diastolic rest — a heartbeat, not an even blink. Glow swells with each
+   beat so the dot reads as something alive. */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0 rgba(232, 75, 58, 0));
+  }
+  /* lub */
+  8% {
+    transform: scale(1.26);
+    filter: brightness(1.35) drop-shadow(0 0 9px rgba(232, 75, 58, 0.85));
+  }
+  16% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 2px rgba(232, 75, 58, 0.3));
+  }
+  /* dub */
+  24% {
+    transform: scale(1.14);
+    filter: brightness(1.2) drop-shadow(0 0 6px rgba(232, 75, 58, 0.6));
+  }
+  32% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0 rgba(232, 75, 58, 0));
+  }
+  /* long diastolic rest */
   100% {
     transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.18);
-    opacity: 1;
+    filter: brightness(1) drop-shadow(0 0 0 rgba(232, 75, 58, 0));
   }
 }
 .light-point {
@@ -89,15 +156,18 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  animation: corePulse 2.6s ease-in-out infinite;
+  animation: heartbeat 2.2s cubic-bezier(0.66, 0, 0.34, 1) infinite;
   animation-delay: inherit;
   transition: filter 0.3s ease, transform 0.3s ease;
 }
-/* hovering anywhere in the enlarged hit area lights the core up */
+/* hovering anywhere in the enlarged hit area floods the core with glow and
+   pauses the beat at its swelled state */
 .light-point:hover .core,
 .light-point-wrap:hover .core {
-  filter: brightness(1.3);
-  transform: scale(1.15);
+  animation-play-state: paused;
+  transform: scale(1.32);
+  filter: brightness(1.5) drop-shadow(0 0 16px rgba(232, 75, 58, 0.95))
+    drop-shadow(0 0 28px rgba(232, 75, 58, 0.55));
 }
 
 /* ===== point labels: visible by default, emphasised on hover ===== */
@@ -303,14 +373,26 @@ body {
   scrollbar-color: rgba(236, 228, 206, 0.16) transparent;
 }
 
-/* ===== minimal hairline ✕ close button ===== */
+/* ===== oversized bare ✕ close button — no disc, no border. Drawn light but
+   wrapped in a strong ink glow so it stays legible over any bright photo and
+   reads as an intentional, artful mark rather than UI chrome. ===== */
+.panel-close,
+.post-close {
+  text-shadow: 0 2px 18px rgba(7, 5, 3, 0.92), 0 0 6px rgba(7, 5, 3, 0.85);
+}
 .panel-close .x-glyph {
   display: block;
-  font-weight: 300;
+  font-weight: 200;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .panel-close:hover {
   color: #f4ecda !important;
+}
+/* a post is open over the panel — hide the panel's own ✕ so it can't be
+   clicked/tabbed through to home; PostDetail's ✕ takes its place */
+.post-open .panel-close {
+  opacity: 0 !important;
+  pointer-events: none;
 }
 .panel-close:hover .x-glyph {
   transform: rotate(90deg);
@@ -360,6 +442,207 @@ body {
 .img-slot:hover img {
   transform: scale(1.045);
   filter: saturate(1.06);
+}
+
+/* ===== playground: a free-floating photo wall ===== */
+/* Cards are absolutely placed by their own x/y/rotate so the wall reads like a
+   pinned-up board, not a grid. The container reserves height for that. */
+.play-wall {
+  position: relative;
+  width: 100%;
+  /* nudge the whole board down off the lede so it sits lower / more centred in
+     the viewport rather than crowding the header */
+  margin-top: clamp(24px, 6vh, 80px);
+  /* tall enough to hold the lowest card (y≈50% + its own height) plus air */
+  height: clamp(620px, 92vw, 1180px);
+}
+/* Three nested layers, each owning ONE animated property so they never clash:
+   .play-card        → absolute placement + the reveal rise-in (opacity)
+   .play-card-float  → the idle drift (transform: translateY, keyframed)
+   .play-card-inner  → resting tilt + hover lift (transform, transitioned) */
+.play-card {
+  position: absolute;
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.play-card-float {
+  animation: cardFloat 9s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -1.3s);
+  will-change: transform;
+}
+.play-card-inner {
+  transform: rotate(var(--rot, 0deg));
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.4s ease;
+}
+.play-card:hover {
+  z-index: 5;
+}
+.play-card:hover .play-card-float {
+  animation-play-state: paused;
+}
+.play-card:hover .play-card-inner {
+  transform: rotate(0deg) translateY(-7px) scale(1.035);
+}
+.play-card:focus-visible .play-card-inner {
+  transform: rotate(0deg) scale(1.02);
+}
+/* small "more frames" chip in the corner of a multi-photo cover */
+.play-stack {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 2;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #f4ecda;
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: rgba(9, 7, 4, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+/* Narrow screens: abandon the scatter for a clean, readable single column. */
+@media (max-width: 760px) {
+  .play-wall {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(30px, 8vw, 44px);
+  }
+  .play-card {
+    position: static;
+    width: 100% !important;
+    left: auto !important;
+    top: auto !important;
+  }
+  .play-card-float {
+    animation: none;
+  }
+  .play-card-inner {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .play-card-float {
+    animation: none;
+  }
+}
+
+/* ===== playground: the opened post ===== */
+@keyframes postIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* ===== post-takeover controls — bare, borderless glyphs that float fixed at
+   the top edge through any scroll. A soft ink shadow (no disc, no capsule)
+   keeps them legible even where they cross a bright photo. ===== */
+.post-close {
+  /* hard-reset the native button chrome — otherwise focus/active paints a
+     light rounded box on macOS Chrome/Safari */
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.25s ease;
+}
+.post-close:focus {
+  outline: none;
+  background: transparent;
+}
+/* keyboard users still get a visible focus ring; pointer clicks don't */
+.post-close:focus-visible {
+  outline: 1px solid rgba(236, 228, 206, 0.5);
+  outline-offset: 3px;
+}
+.post-close:hover {
+  color: #f4ecda !important;
+}
+.post-close .x-glyph {
+  display: block;
+  font-weight: 200;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.post-close:hover .x-glyph {
+  transform: rotate(90deg);
+}
+/* prev / next over the carousel image */
+.post-arrow {
+  position: absolute;
+  top: 50%;
+  margin-top: -22px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  line-height: 1;
+  color: #f4ecda;
+  background: rgba(9, 7, 4, 0.45);
+  border: 1px solid rgba(236, 228, 206, 0.18);
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  z-index: 3;
+}
+.post-arrow:hover:not(:disabled) {
+  background: rgba(216, 65, 47, 0.85);
+  transform: scale(1.08);
+}
+.post-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+@media (max-width: 820px) {
+  .post-detail {
+    display: block !important;
+    padding: clamp(76px, 15vw, 96px) 0 clamp(48px, 12vw, 80px);
+  }
+  .post-grid {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: clamp(24px, 6vw, 36px) !important;
+    /* On phones the image + text stack can be taller than the viewport. The
+       desktop vertical-centring trick (sticky; top:50%; translateY(-50%))
+       then pushes the top of the content above the scroll origin, where it
+       can never be reached. Drop back to natural top-aligned flow so the
+       whole post is always scrollable. */
+    position: static !important;
+    top: auto !important;
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-detail {
+    animation: none !important;
+  }
 }
 
 /* ===== brain index rows: a quiet editorial hover, no image needed ===== */

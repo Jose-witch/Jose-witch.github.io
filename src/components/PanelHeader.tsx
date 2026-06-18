@@ -15,10 +15,10 @@ export function PanelHeader({ kicker, title, lede, titleMargin }: Props) {
       <div
         className="reveal"
         style={{
-          fontFamily: font.mono,
-          fontWeight: 500,
+          fontFamily: font.code,
+          fontWeight: 400,
           fontSize: type.caption,
-          letterSpacing: '.04em',
+          letterSpacing: '.01em',
           color: color.redBright,
           marginBottom: 18,
           ['--i' as string]: 0,

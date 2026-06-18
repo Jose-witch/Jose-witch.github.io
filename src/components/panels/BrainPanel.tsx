@@ -28,10 +28,10 @@ export function BrainPanel() {
             >
               <div
                 style={{
-                  fontFamily: font.mono,
+                  fontFamily: font.code,
                   fontWeight: 500,
                   fontSize: type.caption,
-                  letterSpacing: '.06em',
+                  letterSpacing: '.04em',
                   textTransform: 'uppercase',
                   color: color.redBright,
                   position: 'sticky',
@@ -69,7 +69,7 @@ export function BrainPanel() {
                 >
                   <div
                     style={{
-                      fontFamily: font.mono,
+                      fontFamily: font.code,
                       fontSize: type.micro,
                       letterSpacing: '.04em',
                       color: color.redBright,
@@ -82,10 +82,10 @@ export function BrainPanel() {
                   <div
                     className="brain-note"
                     style={{
-                      fontFamily: font.mono,
+                      fontFamily: font.code,
                       fontSize: type.micro,
                       letterSpacing: '.04em',
-                      color: color.inkFaint,
+                      color: color.slate,
                       textAlign: 'right',
                       whiteSpace: 'nowrap',
                       gridColumn: '2 / 3',
