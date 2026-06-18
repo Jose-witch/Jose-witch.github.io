@@ -118,6 +118,11 @@ body {
 .home-nav-item:active {
   padding-left: 8px;
 }
+/* on phones the section title alone is enough — drop the "THE SKULL/HEART/FEET"
+   labels so the menu reads cleanly */
+.home-nav-hint {
+  display: none;
+}
 
 /* ===== focus: a visible, on-brand ring for keyboard users only ===== */
 :focus-visible {
@@ -263,6 +268,184 @@ body {
   transform: translateX(0) scale(1.03);
 }
 
+/* ===== home: replay-intro corner note ===== */
+.home-intro-link {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(10px, 1.1vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  background: transparent;
+  border: none;
+  padding: 4px 2px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.home-intro-link:hover {
+  color: var(--ink);
+}
+
+/* ===== landing overture ===== */
+/* Each line rises in, slowly, staggered top-to-bottom — the unhurried
+   "develop-in" that gives the prelude its weight. */
+@keyframes introLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.intro-line {
+  opacity: 0;
+  animation: introLineIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+/* stagger: corners settle first & quiet, then the centre rises */
+.intro-edge {
+  animation-delay: 0.1s;
+}
+.intro-kicker {
+  animation-delay: 0.28s;
+}
+.intro-name {
+  animation-delay: 0.42s;
+}
+.intro-sub {
+  animation-delay: 0.7s;
+}
+.intro-entries {
+  animation-delay: 0.92s;
+}
+.intro-cue {
+  animation-delay: 1.12s;
+}
+
+/* ── edge colophon: small, wide-tracked, faint, pinned to the corners ── */
+.intro-edge {
+  position: absolute;
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.intro-edge--tl {
+  top: clamp(22px, 4vh, 40px);
+  left: clamp(22px, 4vw, 48px);
+}
+.intro-edge--tr {
+  top: clamp(22px, 4vh, 40px);
+  right: clamp(22px, 4vw, 48px);
+}
+.intro-edge--bl {
+  bottom: clamp(24px, 4vh, 44px);
+  left: clamp(22px, 4vw, 48px);
+}
+.intro-edge--br {
+  bottom: clamp(24px, 4vh, 44px);
+  right: clamp(22px, 4vw, 48px);
+  left: auto;
+  transform: none;
+}
+
+/* ── centre kicker with flanking rules ── */
+.intro-kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(18px, 3vh, 30px);
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(10px, 1.1vw, 12px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.intro-kicker-rule {
+  width: clamp(28px, 5vw, 56px);
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* ── entry index: the three anatomy doors, previewed ── */
+.intro-entries {
+  display: flex;
+  gap: clamp(20px, 4vw, 56px);
+  margin: clamp(30px, 5vh, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.intro-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.intro-entry-n {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(10px, 1.1vw, 12px);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.intro-entry-part {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(10px, 1.1vw, 12px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.intro-entry-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1.3vw, 14px);
+  letter-spacing: -0.01em;
+  color: var(--ink-muted);
+}
+@media (max-width: 600px) {
+  .intro-entries {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .intro-edge--bl {
+    display: none;
+  }
+}
+/* the scroll cue breathes — a slow up-down nudge on the arrow */
+.intro-cue-arrow {
+  display: inline-block;
+  margin-left: 0.9em;
+  animation: cueBob 2.4s ease-in-out infinite 1.4s;
+}
+@keyframes cueBob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+/* on the way out, the lines don't re-animate — the container handles the lift */
+.intro--leaving .intro-line {
+  animation: none;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-line {
+    animation: none;
+    opacity: 1;
+  }
+  .intro-cue-arrow {
+    animation: none;
+  }
+}
+
 /* ===== on-bone point hint: faint by default, accent only on hover ===== */
 .point-hint {
   color: var(--ink-faint);
@@ -272,21 +455,27 @@ body {
   color: var(--accent);
 }
 
-/* ===== content reveal: a soft rise-in, staggered by inline --i ===== */
+/* ===== content reveal: a slow line-by-line develop-in, staggered by --i =====
+   Tuned to echo the overture: more travel, a faint blur that resolves, a longer
+   duration, and a deliberate per-line gap so a panel's header / lede / rows
+   rise one after another rather than as one block. */
 @keyframes riseIn {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(26px);
+    filter: blur(5px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }
 .reveal {
   opacity: 0;
-  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(var(--i, 0) * 80ms + 120ms);
+  animation: riseIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 110ms + 140ms);
+  will-change: transform, opacity, filter;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -393,6 +582,14 @@ body {
   text-align: left;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  /* Isolate each card onto its own paint/compositing layer. Inside a CSS
+     multi-column container, animating a transform on a fragmented box makes
+     Chrome/Safari re-fragment it mid-hover — the card flashes black and jumps
+     to the next column. A stable layer (translateZ + contain) stops the
+     re-fragmentation so the hover lift stays in place. */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  contain: paint;
 }
 
 /* image card: cover + a meta row beneath */

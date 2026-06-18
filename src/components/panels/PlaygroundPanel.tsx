@@ -22,7 +22,7 @@ export function PlaygroundPanel() {
 
   return (
     <div>
-      <PanelHeader kicker={playground.kicker} title={playground.title} lede={playground.lede} />
+      <PanelHeader kicker={playground.kicker} title={playground.title} />
 
       {/* A refined masonry: heights vary, but every card is on the grid at 0°.
           Image posts get a cover; text posts become a quiet text card. */}

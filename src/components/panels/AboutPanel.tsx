@@ -14,7 +14,7 @@ export function AboutPanel() {
 
   return (
     <div>
-      <PanelHeader kicker={about.kicker} title={about.title} lede={about.lede} />
+      <PanelHeader kicker={about.kicker} title={about.title} />
 
       {/* bio + portrait — the opening row of the body, on the same grid */}
       <div

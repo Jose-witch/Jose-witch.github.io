@@ -51,9 +51,13 @@ const coreStyle: CSSProperties = {
 type Props = {
   open: boolean
   onOpen: (view: Exclude<View, 'home'>) => void
+  /** While the landing overture is up, the home is ghosted behind it. */
+  dimmed?: boolean
+  /** Re-show the landing overture. */
+  onReplayIntro?: () => void
 }
 
-export function Home({ open, onOpen }: Props) {
+export function Home({ open, onOpen, dimmed = false, onReplayIntro }: Props) {
   // Pointer-driven parallax + a slow breathing glow on the bones.
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [glow, setGlow] = useState(0.55)
@@ -97,6 +101,28 @@ export function Home({ open, onOpen }: Props) {
           'radial-gradient(135% 120% at 50% 46%, rgba(22,22,22,.7) 0%, rgba(20,20,20,.5) 58%, rgba(17,17,16,.26) 100%)',
       }}
     >
+      {/* a quiet way back to the overture — bottom-left corner note */}
+      {onReplayIntro && (
+        <button
+          type="button"
+          onClick={onReplayIntro}
+          className="home-intro-link"
+          aria-label="Replay intro"
+          style={{
+            position: 'absolute',
+            bottom: 'clamp(22px,4vh,40px)',
+            left: 'clamp(26px,6vw,84px)',
+            zIndex: 6,
+            opacity: open || dimmed ? 0 : 1,
+            pointerEvents: open || dimmed ? 'none' : 'auto',
+            transition: 'opacity .6s ease .2s',
+          }}
+        >
+          <span aria-hidden style={{ color: color.accent, marginRight: 8 }}>↑</span>
+          intro
+        </button>
+      )}
+
       {/* edge vignette — pools light onto the central figure */}
       <div
         aria-hidden
@@ -119,10 +145,16 @@ export function Home({ open, onOpen }: Props) {
           left: 'clamp(26px,6vw,84px)',
           maxWidth: 'min(46vw, 520px)',
           zIndex: 6,
-          transform: open ? 'translateY(calc(-50% - 12px))' : 'translateY(-50%)',
-          opacity: open ? 0 : 1,
-          transition: 'opacity .5s ease, transform .6s cubic-bezier(.16,1,.3,1)',
-          pointerEvents: open ? 'none' : 'auto',
+          transform: open
+            ? 'translateY(calc(-50% - 12px))'
+            : dimmed
+              ? 'translateY(calc(-50% + 10px))'
+              : 'translateY(-50%)',
+          // hidden behind the overture, then settles in just after it lifts
+          opacity: open || dimmed ? 0 : 1,
+          transition:
+            'opacity .7s ease .1s, transform .9s cubic-bezier(.16,1,.3,1) .1s',
+          pointerEvents: open || dimmed ? 'none' : 'auto',
         }}
       >
         <GlitchTitle
@@ -176,6 +208,7 @@ export function Home({ open, onOpen }: Props) {
               onClick={() => onOpen(p.view)}
             >
               <span
+                className="home-nav-hint"
                 style={{
                   fontFamily: font.mono,
                   fontSize: 12,
@@ -235,20 +268,27 @@ export function Home({ open, onOpen }: Props) {
             // pure translation keeps the float without ever exposing the plane.
             transform: open
               ? 'scale(1.12) translateZ(0)'
-              : `translate(${tilt.x * -22}px, ${tilt.y * -16}px) scale(1.012)`,
-            opacity: open ? 0.14 : 1,
-            filter: open ? 'blur(7px) saturate(.6)' : 'none',
+              : dimmed
+                ? 'scale(1.04)'
+                : `translate(${tilt.x * -22}px, ${tilt.y * -16}px) scale(1.012)`,
+            // ghosted behind the overture → develops to full as it lifts
+            opacity: open ? 0.14 : dimmed ? 0.28 : 1,
+            filter: open
+              ? 'blur(7px) saturate(.6)'
+              : dimmed
+                ? 'blur(5px) saturate(.7)'
+                : 'none',
             transition:
-              'transform .7s cubic-bezier(.16,1,.3,1), opacity .6s ease, filter .6s ease',
+              'transform 1s cubic-bezier(.16,1,.3,1), opacity .9s ease, filter .9s ease',
           }}
         >
           <SkeletonImage glow={glow} style={{ display: 'block' }} />
 
           <div
             style={{
-              opacity: open ? 0 : 1,
-              pointerEvents: open ? 'none' : 'auto',
-              transition: 'opacity .4s ease',
+              opacity: open || dimmed ? 0 : 1,
+              pointerEvents: open || dimmed ? 'none' : 'auto',
+              transition: 'opacity .5s ease .15s',
             }}
           >
             {POINTS.map((p) => (

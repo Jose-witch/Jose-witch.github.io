@@ -45,8 +45,6 @@ const finished: ProjectEntry[] = [
 export const brain = {
   kicker: 'the skull → what the mind makes',
   title: 'Brain project',
-  lede:
-    'Field notes from the edge of the nervous system — research, the wards, and the science of losing one’s balance.',
   groups: [
     { id: 'ongoing', label: 'ongoing', entries: ongoing },
     { id: 'finished', label: 'finished', entries: finished },
@@ -202,8 +200,6 @@ The lens is older than I am and slightly drunk about focus. But there's a softne
 export const playground = {
   kicker: 'the heart → what it keeps',
   title: 'Playground',
-  lede:
-    'The heart’s own archive — photographs, film stills, and small written things, made between night shifts.',
   posts: playPosts,
 }
 
@@ -220,8 +216,6 @@ export type AboutSection = {
 export const about = {
   kicker: 'the feet → where they stand',
   title: 'About',
-  lede:
-    'Anatomy is only another way of drawing a self-portrait.',
   /** A real, on-brand image (replaces the removed meme). City-at-odd-hours. */
   portrait: { src: '/nightlife.jpg', alt: 'Berlin, photographed at an odd hour' },
   portraitCaption: 'Berlin, an odd hour',
@@ -231,7 +225,7 @@ export const about = {
     {
       id: 'currently',
       label: 'currently',
-      lines: ['Berlin · night shifts', 'Doctoral researcher in neurology, Charité'],
+      lines: ['Doctoral researcher in neurology', '@ Charité – Universitätsmedizin Berlin'],
     },
     {
       id: 'speaks',

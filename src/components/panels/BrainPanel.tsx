@@ -8,7 +8,7 @@ export function BrainPanel() {
 
   return (
     <div>
-      <PanelHeader kicker={brain.kicker} title={brain.title} lede={brain.lede} />
+      <PanelHeader kicker={brain.kicker} title={brain.title} />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px,5vw,72px)' }}>
         {brain.groups.map((group) => (
