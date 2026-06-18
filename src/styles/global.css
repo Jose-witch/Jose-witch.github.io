@@ -51,77 +51,92 @@ body {
   line-height: 0.94;
 }
 
-/* ===== home stage: figure pushed to the right, text column on the left ===== */
-/* Wide screens: bias the skeleton into the right half so the masthead column
-   on the left never collides with it (or with the navigation light points). */
-.home-stage {
-  justify-content: flex-end;
-  padding-right: clamp(2vw, 7vw, 160px);
+/* ===== home: intro-aligned title + three large section doors ===== */
+.home-page {
+  overflow: hidden;
 }
-/* Narrow screens: not enough room for the figure AND its outward-reaching dot
-   labels without them colliding with the masthead (or running off-screen). So
-   below this width the on-bone labels are dropped entirely and a real, tappable
-   text menu drives navigation — guaranteeing label/text never overlap at any
-   size. The figure becomes a quiet, non-interactive backdrop behind the type. */
+.home-masthead {
+  width: min(84vw, 980px);
+}
 .home-nav {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(28px, 5vh, 58px);
+  width: min(84vw, 860px);
 }
-@media (max-width: 860px) {
-  .home-stage {
-    justify-content: center;
-    align-items: flex-end !important;
-    padding-right: 0;
-    padding-bottom: clamp(8px, 3vh, 28px);
-  }
-  /* masthead returns to the top-left, full readable width */
-  .home-masthead {
-    top: clamp(20px, 4vh, 48px) !important;
-    transform: none !important;
-    max-width: min(92vw, 560px) !important;
-  }
-  /* the figure: a faded backdrop, shorter, anchored to the bottom edge, and
-     pushed behind the masthead so it can never sit over the type */
-  .home-figure {
-    height: auto !important;
-    width: min(66vw, 340px) !important;
-    max-height: 52vh !important;
-    opacity: 0.4;
-  }
-  /* drop the on-bone dots + labels; the text menu takes over completely */
-  .home-figure .light-point-wrap {
-    display: none;
-  }
-  .home-nav {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-/* a tappable text menu — generous 48px-min rows, one per section */
 .home-nav-item {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(14px, 2vw, 24px);
   width: 100%;
-  min-height: 48px;
-  padding: 12px 2px;
+  min-height: clamp(76px, 9vh, 116px);
+  padding: clamp(16px, 2.2vh, 28px) 6px;
   background: transparent;
   border: none;
   border-top: 1px solid var(--line, rgba(232, 226, 212, 0.16));
   cursor: pointer;
-  text-align: left;
-  transition: padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: right;
+  transition: padding-right 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
 }
 .home-nav-item:last-child {
   border-bottom: 1px solid var(--line, rgba(232, 226, 212, 0.16));
 }
-.home-nav-item:active {
-  padding-left: 8px;
+.home-nav-title {
+  font-size: clamp(42px, 5.2vw, 74px);
+  letter-spacing: -0.035em;
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.66);
+  transition: color 0.3s ease;
 }
-/* on phones the section title alone is enough — drop the "THE SKULL/HEART/FEET"
-   labels so the menu reads cleanly */
-.home-nav-hint {
-  display: none;
+.home-nav-arrow {
+  flex: 0 0 auto;
+  font-size: clamp(18px, 2.4vw, 28px);
+  transition: color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.home-nav-item:hover,
+.home-nav-item:focus-visible {
+  padding-right: 18px;
+  border-color: var(--line-strong);
+}
+.home-nav-item:hover .home-nav-arrow,
+.home-nav-item:focus-visible .home-nav-arrow {
+  color: var(--accent) !important;
+  transform: translateX(4px);
+}
+.home-nav-item:active {
+  padding-right: 12px;
+}
+@media (max-width: 860px) {
+  .home-masthead {
+    top: clamp(20px, 4vh, 48px) !important;
+    max-width: min(92vw, 560px) !important;
+    width: min(92vw, 560px);
+  }
+  .home-nav {
+    margin-top: clamp(28px, 4vh, 40px);
+    width: min(92vw, 560px);
+  }
+  .home-nav-item {
+    min-height: clamp(64px, 9vh, 88px);
+    padding: 14px 2px;
+  }
+  .home-nav-title {
+    font-size: clamp(36px, 10vw, 62px);
+  }
+}
+@media (max-height: 720px) and (min-width: 861px) {
+  .home-masthead {
+    top: clamp(32px, 6vh, 54px) !important;
+  }
+  .home-nav {
+    margin-top: clamp(20px, 3.5vh, 34px);
+  }
+  .home-nav-item {
+    min-height: clamp(62px, 10vh, 86px);
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
 }
 
 /* ===== focus: a visible, on-brand ring for keyboard users only ===== */
@@ -132,140 +147,6 @@ body {
 }
 :focus:not(:focus-visible) {
   outline: none;
-}
-
-/* ===== navigation light points: a cardiac lub-dub pulse, not a metronome =====
-   The rhythm is two quick systolic beats (lub-dub) early in the cycle, then a
-   long diastolic rest — a heartbeat, not an even blink. Glow swells with each
-   beat so the dot reads as something alive. */
-@keyframes heartbeat {
-  0% {
-    transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 0 rgba(140, 47, 36, 0));
-  }
-  /* lub */
-  8% {
-    transform: scale(1.26);
-    filter: brightness(1.35) drop-shadow(0 0 9px rgba(140, 47, 36, 0.85));
-  }
-  16% {
-    transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 2px rgba(140, 47, 36, 0.3));
-  }
-  /* dub */
-  24% {
-    transform: scale(1.14);
-    filter: brightness(1.2) drop-shadow(0 0 6px rgba(140, 47, 36, 0.6));
-  }
-  32% {
-    transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 0 rgba(140, 47, 36, 0));
-  }
-  /* long diastolic rest */
-  100% {
-    transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 0 rgba(140, 47, 36, 0));
-  }
-}
-.light-point {
-  position: relative;
-}
-.light-point .core {
-  display: block;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  animation: heartbeat 2.2s cubic-bezier(0.66, 0, 0.34, 1) infinite;
-  animation-delay: inherit;
-  transition: filter 0.3s ease, transform 0.3s ease;
-}
-/* hovering anywhere in the enlarged hit area floods the core with glow and
-   pauses the beat at its swelled state */
-.light-point:hover .core,
-.light-point-wrap:hover .core {
-  animation-play-state: paused;
-  transform: scale(1.32);
-  filter: brightness(1.5) drop-shadow(0 0 16px rgba(140, 47, 36, 0.95))
-    drop-shadow(0 0 28px rgba(140, 47, 36, 0.55));
-}
-
-/* ===== point labels: visible by default, emphasised on hover ===== */
-@keyframes labelInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 0.82;
-    transform: translateX(0);
-  }
-}
-@keyframes labelInRight {
-  from {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  to {
-    opacity: 0.82;
-    transform: translateX(0);
-  }
-}
-@keyframes labelDriftLeft {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(2px);
-  }
-}
-@keyframes labelDriftRight {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-2px);
-  }
-}
-.point-label {
-  /* resting state: a faint dark pill (with the blur already on the element)
-     so the text stays readable even when it grazes a bright bone; z-index
-     lifts every label above the bones. Hover deepens the pill. */
-  position: absolute;
-  z-index: 8;
-  opacity: 0.82;
-  transform: translateX(0);
-  border-radius: 3px;
-  background: rgba(8, 8, 8, 0.34);
-  /* reset native <button> chrome — the label is now a real clickable button */
-  border: 1px solid transparent;
-  letter-spacing: inherit;
-  line-height: 1.2;
-  text-shadow: 0 1px 3px rgba(8, 8, 8, 0.98), 0 0 6px rgba(8, 8, 8, 0.95),
-    0 0 12px rgba(8, 8, 8, 0.8);
-  transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease,
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-/* fade/slide in once from the dot, then a slow idle drift to keep it alive */
-.point-label--right {
-  animation: labelInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) both,
-    labelDriftRight 5s ease-in-out infinite 0.6s;
-  animation-delay: inherit;
-}
-.point-label--left {
-  animation: labelInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) both,
-    labelDriftLeft 5s ease-in-out infinite 0.6s;
-  animation-delay: inherit;
-}
-.light-point-wrap:hover .point-label,
-.light-point:focus-visible + .point-label {
-  /* emphasised: full opacity + the glass pill returns */
-  opacity: 1;
-  background: rgba(8, 8, 8, 0.6);
-  border-color: var(--line, rgba(232, 226, 212, 0.16));
-  animation-play-state: paused;
-  transform: translateX(0) scale(1.03);
 }
 
 /* ===== home: replay-intro corner note ===== */
@@ -446,15 +327,6 @@ body {
   }
 }
 
-/* ===== on-bone point hint: faint by default, accent only on hover ===== */
-.point-hint {
-  color: var(--ink-faint);
-  transition: color 0.3s ease;
-}
-.light-point-wrap:hover .point-hint {
-  color: var(--accent);
-}
-
 /* ===== content reveal: a slow line-by-line develop-in, staggered by --i =====
    Tuned to echo the overture: more travel, a faint blur that resolves, a longer
    duration, and a deliberate per-line gap so a panel's header / lede / rows
@@ -479,13 +351,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .light-point .core,
-  .point-label,
   .reveal {
     animation: none !important;
-  }
-  .point-label {
-    opacity: 0.82;
   }
   .reveal {
     opacity: 1;

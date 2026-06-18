@@ -39,9 +39,6 @@ export function BrainPanel() {
                 }}
               >
                 {group.label}
-                <span style={{ color: color.inkFaint, marginLeft: 8 }}>
-                  {String(group.entries.length).padStart(2, '0')}
-                </span>
               </div>
             </header>
 

@@ -9,9 +9,8 @@ type Props = {
 
 /**
  * A full-screen, semi-transparent glass takeover (not a small modal). When a
- * light point is clicked the skeleton recedes (handled in Home) and this layer
- * fades + lifts into place, letting the receding figure stay faintly visible
- * behind the frosted glass. Backdrop click / ✕ / Escape all close it.
+ * section is opened, the home page fades out and this layer lifts into place.
+ * Backdrop click / ✕ / Escape all close it.
  */
 export function Panel({ open, onClose, children }: Props) {
   return (

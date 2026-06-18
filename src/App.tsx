@@ -17,7 +17,7 @@ export default function App() {
 
   // Landing overture — shown once per browser session. `intro` = overture is
   // mounted & interactive; `leaving` plays the exit before we unmount it so the
-  // skeleton behind "develops" in as the prelude lifts away.
+  // home page develops in as the prelude lifts away.
   const [intro, setIntro] = useState(() => {
     if (typeof sessionStorage === 'undefined') return true
     return sessionStorage.getItem(INTRO_KEY) !== '1'
@@ -65,11 +65,46 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  // On the home screen, the reverse gesture of entering the site brings the
+  // intro back: wheel/trackpad up, ArrowUp/PageUp, or a downward touch swipe.
+  useEffect(() => {
+    if (intro || introLeaving || open) return
+
+    const showIntro = () => replayIntro()
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY < -18) showIntro()
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (['ArrowUp', 'PageUp', 'Home'].includes(e.key)) {
+        e.preventDefault()
+        showIntro()
+      }
+    }
+    let touchStartY = 0
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches[0].clientY - touchStartY > 32) showIntro()
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: true })
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: true })
+    return () => {
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove)
+    }
+  }, [intro, introLeaving, open])
+
   return (
     <>
       <AmbientBackground />
 
-      {/* While the overture is up, the skeleton home is ghosted behind it; it
+      {/* While the overture is up, the home page is ghosted behind it; it
           resolves to full as the overture lifts (handled via the `intro` flag
           passed to Home). */}
       <Home

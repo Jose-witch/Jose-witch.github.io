@@ -4,24 +4,14 @@ import { color, font } from '../styles/theme'
 type Props = {
   /** Fired when the intro should dismiss (scroll, click, key, or wheel). */
   onEnter: () => void
-  /** Drives the exit animation — parent flips this true, then unmounts later. */
+  /** Drives the exit animation; parent flips this true, then unmounts later. */
   leaving: boolean
 }
 
-/**
- * The landing overture — a quiet full-screen prelude shown once per session.
- * A name set large and tight, a serif-italic line, and a wide-tracked
- * "( scroll )" cue. Any forward gesture (wheel down, click, ↓ / Enter / Space)
- * "lands" the visitor into the skeleton navigation behind it. The skeleton is
- * already present, ghosted, so the exit reads as one continuous develop-in
- * rather than two separate screens.
- */
 export function Intro({ onEnter, leaving }: Props) {
   const [ready, setReady] = useState(false)
   const fired = useRef(false)
 
-  // Let the entrance settle before arming dismissal, so an inertial trackpad
-  // fling that carried the user here doesn't immediately skip the overture.
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 700)
     return () => clearTimeout(t)
@@ -60,24 +50,28 @@ export function Intro({ onEnter, leaving }: Props) {
     }
   }, [ready, onEnter])
 
+  const enterFromClick = () => {
+    if (!ready || fired.current) return
+    fired.current = true
+    onEnter()
+  }
+
   return (
     <div
-      onClick={() => ready && !fired.current && (fired.current = true, onEnter())}
+      onClick={enterFromClick}
       className={`intro${leaving ? ' intro--leaving' : ''}`}
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: 20,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
+        overflow: 'hidden',
         cursor: 'pointer',
-        // a touch deeper than the home ground, so landing reads as a slow
-        // "lights coming up" lift from sunken → base
-        background:
-          'radial-gradient(130% 120% at 50% 46%, rgba(17,17,16,.72) 0%, rgba(17,17,16,.92) 70%, #111110 100%)',
+        backgroundImage:
+          'linear-gradient(180deg, rgba(5,5,5,.38) 0%, rgba(5,5,5,.08) 42%, rgba(5,5,5,.76) 100%), url("/intro.jpeg"), url("/intro.jpeg")',
+        backgroundSize: '100% 100%, auto 100%, cover',
+        backgroundPosition: 'center, center bottom, center bottom',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#090909',
         opacity: leaving ? 0 : 1,
         transform: leaving ? 'translateY(-3vh)' : 'translateY(0)',
         transition:
@@ -85,58 +79,42 @@ export function Intro({ onEnter, leaving }: Props) {
         pointerEvents: leaving ? 'none' : 'auto',
       }}
     >
-      {/* ── edge notes: a cover-page colophon framing the big type ──────────── */}
-      <span className="intro-line intro-edge intro-edge--tl">Pillow Witch</span>
-      <span className="intro-line intro-edge intro-edge--tr">Berlin · 2025</span>
-      <span className="intro-line intro-edge intro-edge--bl">
-        Doctoral researcher · neurology
-      </span>
-
-      {/* ── centre stack ───────────────────────────────────────────────────── */}
-      <div className="intro-line intro-kicker">
-        <span className="intro-kicker-rule" aria-hidden />
-        portfolio · index
-        <span className="intro-kicker-rule" aria-hidden />
-      </div>
-
       <h1
-        className="intro-line intro-name"
+        className="intro-line"
         style={{
+          position: 'absolute',
+          left: 'clamp(26px,6vw,84px)',
+          top: 'clamp(54px,8vh,86px)',
+          zIndex: 2,
           margin: 0,
           fontFamily: font.display,
           fontWeight: 600,
-          fontSize: 'clamp(52px,11vw,150px)',
+          fontSize: 'clamp(44px,8vw,118px)',
           letterSpacing: '-.035em',
           lineHeight: 0.92,
           color: color.ink,
+          textShadow: '0 2px 24px rgba(0,0,0,.72)',
         }}
       >
         Yunyou Tang
       </h1>
 
-      {/* a preview of the anatomy entrances — fills the lower centre and plants
-          the navigation metaphor before the skeleton even appears */}
-      <ul className="intro-line intro-entries" aria-hidden>
-        {ENTRIES.map((e) => (
-          <li key={e.n} className="intro-entry">
-            <span className="intro-entry-n">{e.n}</span>
-            <span className="intro-entry-part">{e.part}</span>
-            <span className="intro-entry-name">{e.name}</span>
-          </li>
-        ))}
-      </ul>
-
-      {/* scroll cue — bottom-right corner */}
-      <div className="intro-line intro-cue intro-edge--br" aria-hidden>
+      <div
+        className="intro-line intro-cue"
+        aria-hidden
+        style={{
+          position: 'absolute',
+          right: 'clamp(22px,4vw,48px)',
+          bottom: 'clamp(24px,4vh,44px)',
+          zIndex: 2,
+          fontFamily: font.mono,
+          color: 'rgba(232,226,212,.72)',
+          textShadow: '0 2px 16px rgba(0,0,0,.82)',
+        }}
+      >
         <span className="intro-cue-text">scroll</span>
         <span className="intro-cue-arrow">↓</span>
       </div>
     </div>
   )
 }
-
-const ENTRIES = [
-  { n: '01', part: 'the skull', name: 'Brain project' },
-  { n: '02', part: 'the heart', name: 'Playground' },
-  { n: '03', part: 'the feet', name: 'About' },
-] as const
