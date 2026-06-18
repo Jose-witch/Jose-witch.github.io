@@ -152,16 +152,35 @@ export function PostDetail({ post, onClose }: Props) {
           }}
         >
           <div style={{ position: 'relative' }}>
+            {/* The image keeps its own aspect ratio (no crop). The frame just
+                caps how tall a portrait shot can get so it never dwarfs the text. */}
             <div
-              className="img-slot"
+              className="img-slot post-detail-figure"
               style={{
                 position: 'relative',
-                aspectRatio: '4 / 3',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 background: 'rgba(232,226,212,.035)',
                 border: `0.5px solid ${color.lineSoft}`,
+                minHeight: cur.src ? undefined : 280,
               }}
             >
-              <ImageSlot src={cur.src} placeholder="drop image" alt={cur.alt} />
+              {cur.src ? (
+                <img
+                  src={cur.src}
+                  alt={cur.alt}
+                  style={{
+                    display: 'block',
+                    maxWidth: '100%',
+                    maxHeight: '74vh',
+                    width: 'auto',
+                    height: 'auto',
+                  }}
+                />
+              ) : (
+                <ImageSlot placeholder="drop image" alt={cur.alt} />
+              )}
             </div>
 
             {cur.caption && (
@@ -286,7 +305,7 @@ function PostBody({ body, renderImages = true }: { body: string; renderImages?: 
                   border: `0.5px solid ${color.lineSoft}`,
                 }}
               >
-                <ImageSlot src={src} placeholder="drop image" alt={alt} />
+                <ImageSlot src={src} placeholder="drop image" alt={alt} fit="contain" />
               </div>
               {caption && (
                 <figcaption

@@ -10,6 +10,34 @@ export function BrainPanel() {
     <div>
       <PanelHeader title={brain.title} />
 
+      <div
+        className="brain-intro page-body"
+        style={{
+          maxWidth: 680,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.1em',
+          marginBottom: 'clamp(48px,6vw,88px)',
+        }}
+      >
+        {brain.intro.map((para, i) => (
+          <p
+            key={i}
+            className="reveal"
+            style={{
+              ['--i' as string]: order++,
+              margin: 0,
+              fontFamily: font.serif,
+              fontSize: type.body,
+              lineHeight: 1.62,
+              color: color.inkMuted,
+            }}
+          >
+            {para}
+          </p>
+        ))}
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px,5vw,72px)' }}>
         {brain.groups.map((group) => (
           <section
@@ -101,19 +129,21 @@ export function BrainPanel() {
                     {entry.title}
                   </h3>
 
-                  <p
-                    style={{
-                      margin: '6px 0 0',
-                      gridColumn: '1 / -1',
-                      maxWidth: 560,
-                      fontFamily: font.serif,
-                      fontSize: type.body,
-                      lineHeight: 1.62,
-                      color: color.inkMuted,
-                    }}
-                  >
-                    {entry.body}
-                  </p>
+                  {entry.body && (
+                    <p
+                      style={{
+                        margin: '6px 0 0',
+                        gridColumn: '1 / -1',
+                        maxWidth: 560,
+                        fontFamily: font.serif,
+                        fontSize: type.body,
+                        lineHeight: 1.62,
+                        color: color.inkMuted,
+                      }}
+                    >
+                      {entry.body}
+                    </p>
+                  )}
                 </li>
               ))}
             </ol>

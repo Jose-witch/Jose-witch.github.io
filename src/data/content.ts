@@ -4,6 +4,8 @@
  * URL) and ImageSlot renders it; omit it and a quiet placeholder shows.
  */
 
+import { playgroundPosts } from './loadPlayground'
+
 export const identity = {
   name: 'Yunyou Tang',
   alias: 'Pillow Witch',
@@ -20,30 +22,64 @@ export type ProjectEntry = {
 
 const ongoing: ProjectEntry[] = [
   {
-    id: 'brain-1',
-    title: 'Vertigo & the falling self',
-    body: 'Vestibular illusions and the strange physics of a body that has lost its sense of down.',
-    note: 'in progress',
+    id: 'pscni-signatures',
+    title:
+      'Absence of Lesion, Network, and Neurotransmitter-Specific Signatures in Post-Stroke Cognitive Impairment: Evidence from Two Independent Cohorts',
+    body: '',
+    note: 'ongoing',
   },
   {
-    id: 'brain-2',
-    title: 'Ward rounds',
-    body: 'A kept logbook of the neurology wards — small cases, big questions, like a diary.',
+    id: 'gait-stimulation',
+    title:
+      'Investigating brain network interactions across behavioral domains to guide therapeutic stimulation for gait',
+    body: '',
     note: 'ongoing',
   },
 ]
 
 const finished: ProjectEntry[] = [
   {
-    id: 'brain-3',
-    title: 'EEG garden',
-    body: 'Generative blooms grown from the noise floor of brainwave data.',
-    note: '2025',
+    id: 'who-falls-after-stroke',
+    title: 'Who Falls After Stroke? Evidence From a Prospective Stroke Cohort',
+    body: '',
+    note: 'European Journal of Neurology',
+  },
+  {
+    id: 'dizziness-vertigo',
+    title:
+      'Neuroanatomical Correlates of Stroke-Related Dizziness and Vertigo: Secondary Analysis from the INSPiRE-TMS Trial',
+    body: '',
+    note: 'published',
+  },
+  {
+    id: 'neonatal-white-matter',
+    title:
+      'Sex Differences in Neonatal White Matter Microstructure and Interhemispheric Lateralization: A Diffusion Tensor Imaging Study',
+    body: '',
+    note: 'published',
+  },
+  {
+    id: 'qc-pipelines-dwi',
+    title:
+      'Comparative Analysis of Quality Control Pipelines for Diffusion Weighted Imaging Data in a Pediatric Population: A Study of QSIPrep and dMRIPrep Pipelines',
+    body: '',
+    note: 'published',
+  },
+  {
+    id: 'anxiety-transgender-youth',
+    title:
+      'Anxiety levels and structural brain connectivity in early pubertal transgender and cisgender youth',
+    body: '',
+    note: 'published',
   },
 ]
 
 export const brain = {
-  title: 'Brain project',
+  title: 'Work',
+  intro: [
+    'I study clinical outcomes in post-stroke patients, focusing on motor, mood, and cognitive domains. Through lesion analysis, including structural, functional, and neurotransmitter network connectivity, I sincerely hope to untangle some of the mysteries that remain. This path began in Zurich, where a call to gender neurosciences led me into the forest of neuroimaging. As a queer person myself, I have been, am, and will remain passionate about unraveling the myths of gender in the brain.',
+    'Can we, someday, use our sensational minds and pictorial pens to paint the human brain in a poetic way?',
+  ],
   groups: [
     { id: 'ongoing', label: 'ongoing', entries: ongoing },
     { id: 'finished', label: 'finished', entries: finished },
@@ -83,107 +119,12 @@ export type PlayPost = {
   tags: string[]
 }
 
-const playPosts: PlayPost[] = [
-  // ── mixed: image + long-ish text ───────────────────────────────────────────
-  {
-    id: 'play-1',
-    title: 'U-Bahn ghosts',
-    date: '2025-02-11',
-    excerpt: 'Long exposures on the last trains out of Alexanderplatz.',
-    body: `Shot on the last trains out of Alexanderplatz — bodies smear into light and the carriage keeps its own time.
-
-I like the platform best in the dead hour after one, when the next train is a rumour and the tiled walls hold a sound that isn't quite an echo. You learn the rhythm of the city by the gaps between its trains.
-
-Three frames from one cold platform, hand-held, shutter dragged until the people became weather.`,
-    cover: { src: '/nightlife.jpg', alt: 'Late train, Alexanderplatz' },
-    images: [
-      { src: '/nightlife.jpg', alt: 'Late train, Alexanderplatz' },
-      { src: '/photography.jpg', alt: 'Platform, 1:14am', caption: 'platform · 1:14am' },
-      { src: '/event.jpg', alt: 'Doors closing' },
-    ],
-    size: 'large',
-    tags: ['35mm', 'berlin', 'night'],
-  },
-
-  // ── pure text: a blog post, no image at all ─────────────────────────────────
-  {
-    id: 'play-2',
-    title: 'On working the night',
-    date: '2025-03-03',
-    excerpt: 'A short note on the hours nobody photographs.',
-    body: `The night shift has a texture you can't explain to anyone who keeps daylight hours. Time goes soft. The ward breathes slower. You become very good at reading a face in the dark.
-
-I used to think the body had one clock. It has many, and they argue. The brain keeps a worse one than you'd hope — which is, I suppose, the whole reason I am here, awake, writing this instead of sleeping.
-
-No photograph for this one. Some hours refuse to be kept that way.`,
-    size: 'small',
-    tags: ['notes', 'charité'],
-  },
-
-  // ── single image, short body ────────────────────────────────────────────────
-  {
-    id: 'play-3',
-    title: 'The cat that visits',
-    date: '2025-04-09',
-    excerpt: 'No name, no collar, all opinions.',
-    body: `Comes to the fire escape around dawn, leaves before I can decide if it's mine. A small recurring miracle with strong opinions about the windowsill.`,
-    cover: { src: '/bird.jpg', alt: 'A visiting cat at dawn' },
-    images: [{ src: '/bird.jpg', alt: 'A visiting cat at dawn' }],
-    size: 'small',
-    tags: ['dawn', 'home'],
-  },
-
-  // ── mixed: text with an inline image partway through ────────────────────────
-  {
-    id: 'play-4',
-    title: 'First light through an old lens',
-    date: '2025-04-22',
-    excerpt: 'A roll shot just to learn the camera’s breathing.',
-    body: `A roll I shot only to learn the camera's breathing — light leaks and all. Mistakes worth keeping.
-
-![A frame from the test roll](/photography.jpg "first light, with the leak")
-
-The lens is older than I am and slightly drunk about focus. But there's a softness to it that no modern glass will give you — the world remembered rather than recorded.`,
-    cover: { src: '/photography.jpg', alt: 'Test roll, first light' },
-    images: [
-      { src: '/photography.jpg', alt: 'Test roll, first light' },
-      { src: '/event.jpg', alt: 'A second frame' },
-    ],
-    size: 'large',
-    tags: ['16mm', 'test'],
-  },
-
-  // ── single image, atmospheric ───────────────────────────────────────────────
-  {
-    id: 'play-5',
-    title: 'Spree, 6am',
-    date: '2025-05-18',
-    excerpt: 'The river before the city wakes.',
-    body: `Fog on the water, one rower, the bridges still asleep. The only hour Berlin holds still long enough for a photograph.`,
-    cover: { src: '/gourmet.jpg', alt: 'Spree at dawn' },
-    images: [
-      { src: '/gourmet.jpg', alt: 'Spree at dawn' },
-      { src: '/nightlife.jpg', alt: 'Oberbaumbrücke', caption: 'oberbaumbrücke' },
-    ],
-    size: 'small',
-    tags: ['dawn', 'river'],
-  },
-
-  // ── pure text: the shortest possible post ───────────────────────────────────
-  {
-    id: 'play-6',
-    title: 'Pressed, between pages',
-    date: '2025-06-07',
-    excerpt: 'An accidental herbarium of every walk home.',
-    body: `Leaves and petals flattened into the back of a notebook — an accidental herbarium of every walk home. One day I'll know all their names.`,
-    size: 'small',
-    tags: ['notes', 'small things'],
-  },
-]
-
+// Posts are authored as Markdown in /content/playground/*.md and loaded via
+// loadPlayground.ts — cover/gallery/size are auto-inferred from the file so the
+// owner only writes `title`, `date`, and the body.
 export const playground = {
   title: 'Playground',
-  posts: playPosts,
+  posts: playgroundPosts,
 }
 
 /** Right-column content for an About section row. Either plain text or links. */
@@ -198,9 +139,9 @@ export type AboutSection = {
 
 export const about = {
   title: 'About',
-  /** A real, on-brand image (replaces the removed meme). City-at-odd-hours. */
-  portrait: { src: '/nightlife.jpg', alt: 'Berlin, photographed at an odd hour' },
-  portraitCaption: 'Berlin, an odd hour',
+  /** Placeholder removed — drop a real portrait at /public and set src below. */
+  portrait: { src: '', alt: 'Portrait' },
+  portraitCaption: '',
   bio:
     'A neurologist-in-training at Charité, Berlin — and a pillow witch after hours. I keep notebooks full of brains and hearts, photograph the city at odd times, and suspect that anatomy is only another way of drawing a self-portrait.',
   sections: [

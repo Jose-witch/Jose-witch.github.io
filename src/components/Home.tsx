@@ -9,7 +9,7 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { view: 'brain', title: 'Brain Project', label: 'Open Brain Project' },
+  { view: 'brain', title: 'Work', label: 'Open Work' },
   { view: 'play', title: 'Playground', label: 'Open Playground' },
   { view: 'about', title: 'About', label: 'Open About' },
 ]
