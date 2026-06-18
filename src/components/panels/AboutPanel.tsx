@@ -44,31 +44,6 @@ export function AboutPanel() {
 
         <div className="about-bio-row">
           <div
-            className="about-portrait img-slot"
-            style={{
-              position: 'relative',
-              aspectRatio: '3 / 4',
-              background: 'rgba(232,226,212,.035)',
-              border: `0.5px solid ${color.lineSoft}`,
-            }}
-          >
-            <ImageSlot src={about.portrait.src} placeholder="drop image" alt={about.portrait.alt} />
-            <span
-              style={{
-                position: 'absolute',
-                left: 0,
-                bottom: -22,
-                fontFamily: font.mono,
-                fontSize: type.mono,
-                color: color.inkFaint,
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {about.portraitCaption}
-            </span>
-          </div>
-
-          <p
             style={{
               margin: 0,
               fontFamily: font.serif,
@@ -78,8 +53,29 @@ export function AboutPanel() {
               color: color.inkMuted,
             }}
           >
-            {about.bio}
-          </p>
+            {about.bio.map((line, i) => (
+              <p key={i} style={{ margin: line === '' ? '0.7em 0 0' : 0, minHeight: line === '' ? '0.3em' : undefined }}>
+                {line}
+              </p>
+            ))}
+          </div>
+
+          {/* portrait sits below the verse — offset & gently tilted, less formal */}
+          <figure className="about-portrait">
+            <ImageSlot src={about.portrait.src} placeholder="drop image" alt={about.portrait.alt} />
+            {about.portraitCaption ? (
+              <figcaption
+                style={{
+                  marginTop: 10,
+                  fontFamily: font.mono,
+                  fontSize: type.mono,
+                  color: color.inkFaint,
+                }}
+              >
+                {about.portraitCaption}
+              </figcaption>
+            ) : null}
+          </figure>
         </div>
       </div>
 

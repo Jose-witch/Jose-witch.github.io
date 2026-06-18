@@ -139,22 +139,27 @@ export type AboutSection = {
 
 export const about = {
   title: 'About',
-  /** Placeholder removed — drop a real portrait at /public and set src below. */
-  portrait: { src: '', alt: 'Portrait' },
+  portrait: { src: '/portrait.jpg', alt: 'Portrait' },
   portraitCaption: '',
-  bio:
-    'A neurologist-in-training at Charité, Berlin — and a pillow witch after hours. I keep notebooks full of brains and hearts, photograph the city at odd times, and suspect that anatomy is only another way of drawing a self-portrait.',
+  /** Free-verse intro — rendered line by line, blank string = paragraph break. */
+  bio: [
+    'Ｔａｎｚ　ｄｉｒ　ｍｅｉｎｅ　Ａｎｔｗｏｒｔ　ｖｏｒ!',
+    '',
+    '┗(＊`Д´＊)┛ ♪♫彡 (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ヽ(•‿•)ノ',
+    '',
+    'See you, see you, on the dancefloor;',
+    'See you, see you, in the forest;',
+    'See you, see you, in any land that connect us.',
+    '',
+    '我们会在雨中安全地相见',
+    '',
+    'If you miss me,',
+    'Wenn du mein Fehlen spürst，',
+    '如果你想起我，',
+    '',
+    'I am h-e-r-e-----',
+  ],
   sections: [
-    {
-      id: 'currently',
-      label: 'currently',
-      lines: ['Doctoral researcher in neurology', '@ Charité – Universitätsmedizin Berlin'],
-    },
-    {
-      id: 'speaks',
-      label: 'speaks',
-      lines: ['中文 · English · Deutsch (a little)'],
-    },
     {
       id: 'elsewhere',
       label: 'elsewhere',
