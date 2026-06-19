@@ -109,7 +109,7 @@ export const about = {
     '我们会在雨中安全地相见',
     '',
     'If you miss me,',
-    'Wenn du mein Fehlen spürst，',
+    'Wenn ich dir fehle，',
     '如果你想起我，',
     '',
     'I am h-e-r-e-----',
