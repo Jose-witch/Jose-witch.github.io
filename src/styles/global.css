@@ -149,23 +149,6 @@ body {
   outline: none;
 }
 
-/* ===== home: replay-intro corner note ===== */
-.home-intro-link {
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(10px, 1.1vw, 12px);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  background: transparent;
-  border: none;
-  padding: 4px 2px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-.home-intro-link:hover {
-  color: var(--ink);
-}
-
 /* ===== landing overture ===== */
 /* Each line rises in, slowly, staggered top-to-bottom — the unhurried
    "develop-in" that gives the prelude its weight. */
@@ -685,6 +668,27 @@ body {
 }
 .brain-row:hover .brain-note {
   color: rgba(232, 226, 212, 0.72);
+}
+/* "read paper ↗" link under a project title — quiet but clearly tappable. */
+.brain-link {
+  opacity: 0.92;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+.brain-link-label {
+  text-transform: uppercase;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: opacity 0.3s ease;
+}
+.brain-link-arrow {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.brain-link:hover {
+  opacity: 1;
+  color: #b8503f;
+}
+.brain-link:hover .brain-link-arrow {
+  transform: translate(2px, -2px);
 }
 
 @media (prefers-reduced-motion: reduce) {

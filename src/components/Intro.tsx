@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { color, font } from '../styles/theme'
+import { gesturesLocked } from '../gestureLock'
 
 type Props = {
   /** Fired when the intro should dismiss (scroll, click, key, or wheel). */
@@ -25,7 +26,7 @@ export function Intro({ onEnter, leaving }: Props) {
       onEnter()
     }
     const onWheel = (e: WheelEvent) => {
-      if (e.deltaY > 2) enter()
+      if (e.deltaY > 2 && !gesturesLocked()) enter()
     }
     const onKey = (e: KeyboardEvent) => {
       if (['ArrowDown', 'Enter', ' ', 'PageDown'].includes(e.key)) {
@@ -36,7 +37,7 @@ export function Intro({ onEnter, leaving }: Props) {
     let touchStartY = 0
     const onTouchStart = (e: TouchEvent) => (touchStartY = e.touches[0].clientY)
     const onTouchMove = (e: TouchEvent) => {
-      if (touchStartY - e.touches[0].clientY > 24) enter()
+      if (touchStartY - e.touches[0].clientY > 24 && !gesturesLocked()) enter()
     }
     window.addEventListener('wheel', onWheel, { passive: true })
     window.addEventListener('keydown', onKey)

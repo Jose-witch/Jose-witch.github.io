@@ -19,11 +19,9 @@ type Props = {
   onOpen: (view: Exclude<View, 'home'>) => void
   /** While the landing intro is up, the home is ghosted behind it. */
   dimmed?: boolean
-  /** Re-show the landing intro. */
-  onReplayIntro?: () => void
 }
 
-export function Home({ open, onOpen, dimmed = false, onReplayIntro }: Props) {
+export function Home({ open, onOpen, dimmed = false }: Props) {
   return (
     <div
       className="home-page"
@@ -39,26 +37,6 @@ export function Home({ open, onOpen, dimmed = false, onReplayIntro }: Props) {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      {onReplayIntro && (
-        <button
-          type="button"
-          onClick={onReplayIntro}
-          className="home-intro-link"
-          aria-label="Replay intro"
-          style={{
-            position: 'absolute',
-            bottom: 'clamp(22px,4vh,40px)',
-            left: 'clamp(26px,6vw,84px)',
-            zIndex: 6,
-            opacity: open || dimmed ? 0 : 1,
-            pointerEvents: open || dimmed ? 'none' : 'auto',
-            transition: 'opacity .6s ease .2s',
-          }}
-        >
-          intro
-        </button>
-      )}
-
       <div
         aria-hidden
         style={{

@@ -8,7 +8,7 @@ export function BrainPanel() {
 
   return (
     <div>
-      <PanelHeader title={brain.title} />
+      <PanelHeader title={brain.title} titleMargin="0 0 clamp(20px,2.4vw,32px)" />
 
       <div
         className="brain-intro page-body"
@@ -143,6 +143,34 @@ export function BrainPanel() {
                     >
                       {entry.body}
                     </p>
+                  )}
+
+                  {entry.url && (
+                    <a
+                      href={entry.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Read paper: ${entry.title}`}
+                      className="brain-link"
+                      style={{
+                        margin: '12px 0 0',
+                        gridColumn: '1 / -1',
+                        justifySelf: 'start',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4em',
+                        fontFamily: font.mono,
+                        fontSize: type.mono,
+                        letterSpacing: '.06em',
+                        color: color.accent,
+                        textDecoration: 'none',
+                      }}
+                    >
+                      <span className="brain-link-label">read paper</span>
+                      <span className="brain-link-arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
                   )}
                 </li>
               ))}

@@ -5,6 +5,7 @@
  */
 
 import { playgroundPosts } from './loadPlayground'
+import { work } from './loadWork'
 
 export const identity = {
   name: 'Yunyou Tang',
@@ -18,73 +19,27 @@ export type ProjectEntry = {
   body: string
   /** Right-aligned status note: a year, a phase, a venue. */
   note: string
+  /** Optional paper/external link — rendered as a small ↗ beside the title. */
+  url?: string
 }
 
-const ongoing: ProjectEntry[] = [
-  {
-    id: 'pscni-signatures',
-    title:
-      'Absence of Lesion, Network, and Neurotransmitter-Specific Signatures in Post-Stroke Cognitive Impairment: Evidence from Two Independent Cohorts',
-    body: '',
-    note: 'ongoing',
-  },
-  {
-    id: 'gait-stimulation',
-    title:
-      'Investigating brain network interactions across behavioral domains to guide therapeutic stimulation for gait',
-    body: '',
-    note: 'ongoing',
-  },
-]
-
-const finished: ProjectEntry[] = [
-  {
-    id: 'who-falls-after-stroke',
-    title: 'Who Falls After Stroke? Evidence From a Prospective Stroke Cohort',
-    body: '',
-    note: 'European Journal of Neurology',
-  },
-  {
-    id: 'dizziness-vertigo',
-    title:
-      'Neuroanatomical Correlates of Stroke-Related Dizziness and Vertigo: Secondary Analysis from the INSPiRE-TMS Trial',
-    body: '',
-    note: '',
-  },
-  {
-    id: 'neonatal-white-matter',
-    title:
-      'Sex Differences in Neonatal White Matter Microstructure and Interhemispheric Lateralization: A Diffusion Tensor Imaging Study',
-    body: '',
-    note: '',
-  },
-  {
-    id: 'qc-pipelines-dwi',
-    title:
-      'Comparative Analysis of Quality Control Pipelines for Diffusion Weighted Imaging Data in a Pediatric Population: A Study of QSIPrep and dMRIPrep Pipelines',
-    body: '',
-    note: '',
-  },
-  {
-    id: 'anxiety-transgender-youth',
-    title:
-      'Anxiety levels and structural brain connectivity in early pubertal transgender and cisgender youth',
-    body: '',
-    note: '',
-  },
-]
-
-export const brain = {
-  title: 'Work',
-  intro: [
-    'I study clinical outcomes in post-stroke patients, focusing on motor, mood, and cognitive domains. Through lesion analysis, including structural, functional, and neurotransmitter network connectivity, I sincerely hope to untangle some of the mysteries that remain. This path began in Zurich, where a call to gender neurosciences led me into the forest of neuroimaging. As a queer person myself, I have been, am, and will remain passionate about unraveling the myths of gender in the brain.',
-    'Can we, someday, use our sensational minds and pictorial pens to paint the human brain in a poetic way?',
-  ],
-  groups: [
-    { id: 'ongoing', label: 'ongoing', entries: ongoing },
-    { id: 'finished', label: 'finished', entries: finished },
-  ],
+export type WorkGroup = {
+  id: string
+  label: string
+  entries: ProjectEntry[]
 }
+
+export type WorkContent = {
+  title: string
+  intro: string[]
+  groups: WorkGroup[]
+}
+
+/**
+ * The Work section is authored in /content/work.md and parsed by loadWork.ts so
+ * it can be edited without touching code. See content/HOW-TO-ADD-WORK.md.
+ */
+export const brain: WorkContent = work
 
 /**
  * A Playground post = a blog/Instagram hybrid entry. `cover` and `images` are

@@ -8,6 +8,7 @@ import { Panel } from './components/Panel'
 import { BrainPanel } from './components/panels/BrainPanel'
 import { PlaygroundPanel } from './components/panels/PlaygroundPanel'
 import { AboutPanel } from './components/panels/AboutPanel'
+import { lockGestures, gesturesLocked } from './gestureLock'
 
 const INTRO_KEY = 'pw-intro-seen'
 
@@ -23,23 +24,34 @@ export default function App() {
     return sessionStorage.getItem(INTRO_KEY) !== '1'
   })
   const [introLeaving, setIntroLeaving] = useState(false)
+  // Bumped on every replay so React remounts <Intro> fresh, resetting its
+  // internal `fired` guard — otherwise the second visit would be inert.
+  const [introRun, setIntroRun] = useState(0)
+
 
   const enter = () => {
     if (introLeaving) return
+    lockGestures()
     setIntroLeaving(true)
     try {
       sessionStorage.setItem(INTRO_KEY, '1')
     } catch {
       /* private mode — fine, it'll just show again */
     }
-    // unmount after the exit transition (see Intro's 1.1s transform)
-    setTimeout(() => setIntro(false), 1150)
+    // unmount after the exit transition (see Intro's 1.1s transform), then
+    // clear the leaving flag so the home-screen gesture listeners re-arm —
+    // otherwise `introLeaving` stays true and swiping up never works again.
+    setTimeout(() => {
+      setIntro(false)
+      setIntroLeaving(false)
+    }, 1150)
   }
 
   // Re-show the overture on demand (the home's small "intro" control). Forget
   // the seen-flag and remount it fresh so the entrance replays.
   const replayIntro = () => {
     if (intro) return
+    lockGestures()
     try {
       sessionStorage.removeItem(INTRO_KEY)
     } catch {
@@ -47,6 +59,7 @@ export default function App() {
     }
     setView('home')
     setIntroLeaving(false)
+    setIntroRun((n) => n + 1)
     setIntro(true)
   }
 
@@ -65,14 +78,16 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // On the home screen, the reverse gesture of entering the site brings the
-  // intro back: wheel/trackpad up, ArrowUp/PageUp, or a downward touch swipe.
+  // On the home screen, an upward swipe (mouse wheel or touch) brings the intro
+  // back — finger/content moves up, the same direction you'd push the home page
+  // away. Also bound to ArrowUp/PageUp/Home for keyboards.
   useEffect(() => {
     if (intro || introLeaving || open) return
 
     const showIntro = () => replayIntro()
     const onWheel = (e: WheelEvent) => {
-      if (e.deltaY < -18) showIntro()
+      // scroll/swipe up = deltaY negative
+      if (e.deltaY < -18 && !gesturesLocked()) showIntro()
     }
     const onKey = (e: KeyboardEvent) => {
       if (['ArrowUp', 'PageUp', 'Home'].includes(e.key)) {
@@ -85,7 +100,8 @@ export default function App() {
       touchStartY = e.touches[0].clientY
     }
     const onTouchMove = (e: TouchEvent) => {
-      if (e.touches[0].clientY - touchStartY > 32) showIntro()
+      // swipe up: finger travels upward, so clientY decreases
+      if (touchStartY - e.touches[0].clientY > 32 && !gesturesLocked()) showIntro()
     }
 
     window.addEventListener('wheel', onWheel, { passive: true })
@@ -107,12 +123,7 @@ export default function App() {
       {/* While the overture is up, the home page is ghosted behind it; it
           resolves to full as the overture lifts (handled via the `intro` flag
           passed to Home). */}
-      <Home
-        open={open}
-        onOpen={setView}
-        dimmed={intro && !introLeaving}
-        onReplayIntro={replayIntro}
-      />
+      <Home open={open} onOpen={setView} dimmed={intro && !introLeaving} />
 
       <Panel open={open} onClose={() => setView('home')}>
         {shown === 'brain' && <BrainPanel />}
@@ -120,7 +131,7 @@ export default function App() {
         {shown === 'about' && <AboutPanel />}
       </Panel>
 
-      {intro && <Intro onEnter={enter} leaving={introLeaving} />}
+      {intro && <Intro key={introRun} onEnter={enter} leaving={introLeaving} />}
 
       <Textures halftone grain={22} />
     </>
