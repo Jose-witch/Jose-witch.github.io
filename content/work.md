@@ -12,7 +12,7 @@ intro:
 
 ## finished
 
-- Who Falls After Stroke? Evidence From a Prospective Stroke Cohort | European Journal of Neurology | https://www.medrxiv.org/content/10.64898/2026.01.08.26343741v1
+- Who Falls After Stroke? Evidence From a Prospective Stroke Cohort | European Journal of Neurology | https://onlinelibrary.wiley.com/doi/10.1111/ene.70678
 - Neuroanatomical Correlates of Stroke-Related Dizziness and Vertigo: Secondary Analysis from the INSPiRE-TMS Trial
 - Sex Differences in Neonatal White Matter Microstructure and Interhemispheric Lateralization: A Diffusion Tensor Imaging Study
 - Comparative Analysis of Quality Control Pipelines for Diffusion Weighted Imaging Data in a Pediatric Population: A Study of QSIPrep and dMRIPrep Pipelines
