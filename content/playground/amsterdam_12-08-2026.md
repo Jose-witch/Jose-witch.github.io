@@ -1,6 +1,6 @@
 ---
 title: The performed ruins in old church in Amsterdam
-date: 2026-08-12
+date: 2026-05-09
 tags: [amsterdam, film]
 ---
 
