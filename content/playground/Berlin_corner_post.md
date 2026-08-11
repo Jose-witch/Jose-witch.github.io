@@ -1,6 +1,6 @@
 ---
 title: The structure of Berlin after school
-date: 2026-08-12
+date: 2026-06-20
 tags: [berlin, film]
 ---
 
