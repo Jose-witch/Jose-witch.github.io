@@ -54,10 +54,14 @@ tags: [tag1, tag2]
 
 - **段落 Paragraphs**：段落之间空一行。Separate paragraphs with a blank line.
 - **图片 Images**：单独一行写 `![描述](/文件名.jpg)`。
-  - 路径以 `/` 开头，对应 `public/` 文件夹里的图片。Path starts with `/`, pointing into `public/`.
-  - 文件名必须和上传到 `public/` 的图片**完全一致**（含大小写）。Must match the uploaded filename exactly.
+  - 图片可以上传到 `public/`，也可以直接和 md 放在 `content/playground/` 里——两处都能显示。
+    Photos may be uploaded to `public/` **or** dropped next to the post in `content/playground/`.
+  - 只有**文件名**重要：大小写、前面的 `/`、多余的文件夹路径都会被自动忽略。
+    Only the filename matters — case, the leading `/` and any folder path are ignored.
+  - 文件名有空格也可以。Spaces in filenames are fine.
+  - 多张图可以连着写、也可以中间空行，效果一样。Consecutive image lines and
+    blank-line-separated ones behave identically.
   - 可选标题：`![描述](/文件名.jpg "图片说明")` —— 引号里的文字会显示在图片下方。
-  - 文件名**不能有空格**。No spaces in filenames (`my-photo.jpg`, not `my photo.jpg`).
 - 其它 Markdown（**加粗**、*斜体*、`> 引用`）也支持。
 
 ## 5. 自动行为（AI 不用管，但要知道）/ Auto behaviour

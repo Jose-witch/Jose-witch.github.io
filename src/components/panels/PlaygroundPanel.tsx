@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { color } from '../../styles/theme'
 import { playground, type PlayPost } from '../../data/content'
+import { stripImages } from '../../data/markdown'
 import { ImageSlot } from '../ImageSlot'
 import { PanelHeader } from '../PanelHeader'
 import { PostDetail } from './PostDetail'
@@ -94,12 +95,7 @@ function PostCard({ post, index, onOpen }: CardProps) {
 
 /** A short serif excerpt for text cards; full text stays inside PostDetail. */
 function blogPreview(body: string): string {
-  const text = body
-    .split(/\n\s*\n/)
-    .filter((block) => !/^!\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)$/.test(block.trim()))
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim()
+  const text = stripImages(body)
 
   return text.length > BLOG_PREVIEW_CHARS
     ? text.slice(0, BLOG_PREVIEW_CHARS).trimEnd() + '…'

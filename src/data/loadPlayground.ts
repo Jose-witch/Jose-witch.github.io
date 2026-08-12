@@ -12,6 +12,8 @@
  * image syntax the renderer already understands. No markdown engine needed.
  */
 import type { PlayImage, PlayPost } from './content'
+import { findImages, stripImages } from './markdown'
+import { resolveMedia } from './media'
 
 /** Eagerly pull every markdown file's raw text at build time (Vite). */
 const files = import.meta.glob('/content/playground/*.md', {
@@ -19,8 +21,6 @@ const files = import.meta.glob('/content/playground/*.md', {
   import: 'default',
   eager: true,
 }) as Record<string, string>
-
-const IMG_RE = /!\[(.*?)\]\((\S*?)(?:\s+"(.*?)")?\)/g
 
 /** Split `---\n...\n---\nbody` into a frontmatter map + the body text. */
 function splitFrontmatter(raw: string): { meta: Record<string, string>; body: string } {
@@ -48,13 +48,9 @@ function parseTags(value?: string): string[] {
 
 /** Collect every `![alt](src "caption")` image in body order. */
 function extractImages(body: string): PlayImage[] {
-  const images: PlayImage[] = []
-  for (const m of body.matchAll(IMG_RE)) {
-    const [, alt, src, caption] = m
-    if (!src) continue
-    images.push({ src, alt: alt || '', ...(caption ? { caption } : {}) })
-  }
-  return images
+  // Match each written path against the photos actually uploaded, so a stray
+  // folder, a capital letter or a small typo still finds the picture.
+  return findImages(body).map((img) => ({ ...img, src: resolveMedia(img.src) }))
 }
 
 /** Filename → fallback id/slug, e.g. ".../2025-02-11-u-bahn-ghosts.md" → that stem. */
@@ -62,13 +58,14 @@ function slugFromPath(path: string): string {
   return path.split('/').pop()!.replace(/\.md$/, '')
 }
 
-/** Strip an inline image's caption from an excerpt source (keep the prose). */
+/** The first paragraph of prose (images ignored) — used as the excerpt. */
 function firstParagraph(body: string): string {
-  const block = body
-    .split(/\n\s*\n/)
-    .map((b) => b.trim())
-    .find((b) => b && !/^!\[/.test(b))
-  return (block ?? '').replace(/\s+/g, ' ').trim()
+  return (
+    body
+      .split(/\n\s*\n/)
+      .map((block) => stripImages(block))
+      .find(Boolean) ?? ''
+  )
 }
 
 function toPost(path: string, raw: string): PlayPost {

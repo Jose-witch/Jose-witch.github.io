@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom'
 import { color, font, type, ease } from '../../styles/theme'
 import { ImageSlot } from '../ImageSlot'
 import type { PlayPost } from '../../data/content'
+import { splitImages } from '../../data/markdown'
+import { resolveMedia } from '../../data/media'
 import { fmtDate } from './PlaygroundPanel'
 
 type Props = {
@@ -20,6 +22,8 @@ type Props = {
 export function PostDetail({ post, onClose }: Props) {
   const frames = post.images ?? []
   const [frame, setFrame] = useState(0)
+  // Photos whose file couldn't be found — fall back to the named placeholder.
+  const [broken, setBroken] = useState<string[]>([])
   const many = frames.length > 1
   const hasImages = frames.length > 0
 
@@ -163,13 +167,14 @@ export function PostDetail({ post, onClose }: Props) {
                 justifyContent: 'center',
                 background: 'rgba(232,226,212,.035)',
                 border: `0.5px solid ${color.lineSoft}`,
-                minHeight: cur.src ? undefined : 280,
+                minHeight: cur.src && !broken.includes(cur.src) ? undefined : 280,
               }}
             >
-              {cur.src ? (
+              {cur.src && !broken.includes(cur.src) ? (
                 <img
                   src={cur.src}
                   alt={cur.alt}
+                  onError={() => setBroken((b) => [...b, cur.src])}
                   style={{
                     display: 'block',
                     maxWidth: '100%',
@@ -179,7 +184,7 @@ export function PostDetail({ post, onClose }: Props) {
                   }}
                 />
               ) : (
-                <ImageSlot placeholder="drop image" alt={cur.alt} />
+                <ImageSlot src={cur.src} placeholder="drop image" alt={cur.alt} />
               )}
             </div>
 
@@ -282,18 +287,17 @@ export function PostDetail({ post, onClose }: Props) {
  * caption (§5.4). Kept deliberately small — no full markdown engine needed.
  */
 function PostBody({ body, renderImages = true }: { body: string; renderImages?: boolean }) {
-  const blocks = body.split(/\n\s*\n/)
-  const imgRe = /^!\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)$/
+  // Images are recognised wherever they sit — alone, stacked on consecutive
+  // lines, or inline in a sentence — never printed as raw `![](...)` text.
+  const pieces = splitImages(body)
 
   return (
     <div className="post-body" style={{ margin: '20px 0 0' }}>
-      {blocks.map((raw, i) => {
-        const block = raw.trim()
-        if (!block) return null
-        const m = block.match(imgRe)
-        if (m) {
+      {pieces.map((piece, i) => {
+        if (piece.kind === 'image') {
           if (!renderImages) return null
-          const [, alt, src, caption] = m
+          const { alt, caption } = piece
+          const src = resolveMedia(piece.src)
           return (
             <figure key={i} style={{ margin: '24px 0' }}>
               <div
@@ -322,20 +326,25 @@ function PostBody({ body, renderImages = true }: { body: string; renderImages?: 
             </figure>
           )
         }
-        return (
-          <p
-            key={i}
-            style={{
-              fontFamily: font.serif,
-              fontSize: type.body,
-              lineHeight: 1.7,
-              color: color.inkMuted,
-              margin: '0 0 16px',
-            }}
-          >
-            {block}
-          </p>
-        )
+        // A run of prose — blank lines inside it are paragraph breaks.
+        return piece.text
+          .split(/\n\s*\n/)
+          .map((para) => para.trim())
+          .filter(Boolean)
+          .map((para, j) => (
+            <p
+              key={`${i}-${j}`}
+              style={{
+                fontFamily: font.serif,
+                fontSize: type.body,
+                lineHeight: 1.7,
+                color: color.inkMuted,
+                margin: '0 0 16px',
+              }}
+            >
+              {para}
+            </p>
+          ))
       })}
     </div>
   )

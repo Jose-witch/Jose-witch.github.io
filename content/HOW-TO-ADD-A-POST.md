@@ -12,11 +12,11 @@ All your posts live in the folder `content/playground/`.
 
 ### 1. Add your images
 
-Put your photos into the **`public/`** folder (one level up from here).
-Use simple filenames, no spaces — e.g. `berlin-fog.jpg`.
+Upload your photos into **this same `content/playground/` folder** (simplest —
+post and photos live together), or into the `public/` folder. Either works.
 
-On GitHub: open the `public` folder → **Add file → Upload files** → drag your
-photos in → **Commit changes**.
+On GitHub: open the folder → **Add file → Upload files** → drag your photos in
+→ **Commit changes**.
 
 ### 2. Create a new post file
 
@@ -59,21 +59,32 @@ or two. That's it. ✨
   need `title` and `date`. `tags` is optional.
 - **`date`** must look like `YYYY-MM-DD` (year-month-day). Newer dates show up
   first on the wall.
-- To add a photo, write `![](/filename.jpg)` on its own line. The `/` means
-  "look in the public folder". The first photo in the post becomes the **cover**;
-  all the photos together become a **swipe-through gallery**.
+- To add a photo, write `![](/filename.jpg)` on its own line — just the name of
+  the file you uploaded. The first photo in the post becomes the **cover**; all
+  the photos together become a **swipe-through gallery**.
 - **No photos? No problem.** Leave them out and the post becomes a clean
   text/blog card instead.
 - Want a little caption under a photo? Put it in quotes:
   `![](/photo.jpg "shot at dawn")`.
 
-## Common mistakes
+## Things you do NOT need to worry about
 
-- ❌ Forgetting the `/` in front of the image name (`![](berlin.jpg)` won't show
-  → use `![](/berlin.jpg)`).
-- ❌ A space in the image filename. Rename `my photo.jpg` → `my-photo.jpg`.
-- ❌ Uploading the image but typing a different filename in the post. They must
-  match exactly, including capital letters.
+The site is forgiving about photo names, so these all still work:
+
+- ✅ Forgetting the `/` — `![](berlin.jpg)` shows up just fine.
+- ✅ Spaces or capital letters — `![](My Berlin.JPG)` finds `my berlin.jpg`.
+- ✅ Whichever folder you uploaded the photo into (`content/playground/`,
+  `public/`, or even the top of the repository).
+- ✅ A small typo — `berlin-fogg.jpg` still finds `berlin-fog.jpg`.
+- ✅ How you stack the photo lines — one after another, with blank lines
+  between them, or several on the same line. All the same.
+
+Two things that do matter:
+
+- The file must be a **`.jpg` / `.png` / `.webp`**. An iPhone `.HEIC` cannot be
+  shown by browsers — export/save it as JPEG before uploading.
+- **The photo has to be uploaded.** If it is missing, the card shows a grey box
+  saying `photo not found: <filename>` — your cue to upload it.
 
 When in doubt, copy an existing `.md` file from `content/playground/` and change
 the words. (Tip: there's a full format spec at `content/AI-FORMAT-SPEC.md` you can
