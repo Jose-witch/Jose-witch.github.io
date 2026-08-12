@@ -13,7 +13,7 @@ intro:
 ## finished
 
 - Who Falls After Stroke? Evidence From a Prospective Stroke Cohort | European Journal of Neurology | https://onlinelibrary.wiley.com/doi/10.1111/ene.70678
-- Neuroanatomical Correlates of Stroke-Related Dizziness and Vertigo: Secondary Analysis from the INSPiRE-TMS Trial
+- Neuroanatomical Correlates of Stroke-Related Dizziness and Vertigo: Secondary Analysis from the INSPiRE-TMS Trial | Journal of Neurology | https://link.springer.com/article/10.1007/s00415-026-14033-3
 - Sex Differences in Neonatal White Matter Microstructure and Interhemispheric Lateralization: A Diffusion Tensor Imaging Study
 - Comparative Analysis of Quality Control Pipelines for Diffusion Weighted Imaging Data in a Pediatric Population: A Study of QSIPrep and dMRIPrep Pipelines
 - Anxiety levels and structural brain connectivity in early pubertal transgender and cisgender youth
